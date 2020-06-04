@@ -2,7 +2,7 @@
 
 const Discord = require(`discord.js`),
     fs = require(`fs`),
-    config = require(`../config.json`),
+    { token } = require(`../config.json`),
     client = new Discord.Client();
 
 let funcsObj = {},
@@ -42,4 +42,4 @@ client.on(`message`, async msg => {
     }
 });
 
-client.login(config.token);
+client.login(token);
