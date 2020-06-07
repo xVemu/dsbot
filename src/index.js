@@ -2,24 +2,17 @@
 
 const Discord = require(`discord.js`),
     fs = require(`fs`),
-    { token } = require(`../config.json`),
-    client = new Discord.Client();
+    { token, prefix } = require(`../config.json`),
+    client = new Discord.Client({ presence: { activity: { name: `prefix: ?`}}});
 
-let funcsObj = {},
-    funcs = [];
+client.cmds = new Discord.Collection();
 
-fs.readdir(`src/modules`, (err, files) => {
-    if (err) console.error(err);
-    files.map(v => {
-        if (v.endsWith(`.js`)) {
-            const vReplace = v.replace(`.js`, ``);
-            funcsObj[vReplace] = require(`./modules/` + vReplace);
-            funcs.push(vReplace);
-        }
-    });
-});
+const cmdFiles = fs.readdirSync(`src/modules`).filter(file => file.endsWith(`.js`));
 
-exports.funcs = funcs;
+for (const file of cmdFiles) {
+    const cmd = require(`./modules/${file}`);
+    client.cmds.set(cmd.name, cmd);
+}
 
 client.on(`ready`, async () => {
     console.log(`Logged in as
@@ -27,18 +20,31 @@ client.on(`ready`, async () => {
     \n${client.user.id}`);
 });
 
-client.on(`message`, async msg => {
-    if (msg.content.startsWith(`?`)) {
-        try {
-            const split = msg.content.split(` `);
-            const message = await funcsObj[split[0].substr(1).toLowerCase()](msg, split.slice(1));
-            await msg.channel.send(message);
+client.on(`message`, msg => {
+    if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+    const args = msg.content.slice(prefix.length).split(/ +/);
+    const cmdName = args.shift().toLowerCase();
+    const cmd = client.cmds.get(cmdName)
+        || client.cmds.find(cmd => cmd.aliases && cmd.aliases.includes(cmdName));
+    if (!cmd) return;
+    if (cmd.guildOnly && msg.channel.type !== `text`) {
+        return msg.reply(`I can't execute that command inside DMs!`);
+    }
+    if (cmd.args > 0 && args.length != cmd.args) {
+        let reply = `You didn't provide any arguments!`;
+
+        if (cmd.usage) {
+            reply += `\nThe proper usage would be: \`${prefix}${cmd.name} ${cmd.usage}\``;
         }
-        catch (e) {
-            if (e.message == `funcsObj[split[0].substr(...).toLowerCase(...)] is not a function`) {
-                console.log(`Command not found: ${msg.content}`);
-            } else console.error(e);
-        }
+
+        return msg.reply(reply);
+    }
+    try {
+        cmd.execute(msg, args);
+        return;
+    }
+    catch (e) {
+        console.error(e);
     }
 });
 

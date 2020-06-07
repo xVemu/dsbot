@@ -2,8 +2,15 @@
 
 const fetch = require(`node-fetch`);
 
-module.exports = async () => {
-    const response = await fetch(`https://api.thecatapi.com/v1/images/search`, { redirect: `follow` });
-    const [img] = await response.json();
-    return {files:[img.url]};
+module.exports = {
+    name: `kitty`,
+    description: `Sends random cat picture.`,
+    args: 0,
+    guildOnly: false,
+    aliases: [`k`],
+    async execute(msg) {
+        const response = await fetch(`https://api.thecatapi.com/v1/images/search`, { redirect: `follow` });
+        const {0: {url}} = await response.json();
+        msg.channel.send({files:[url]});
+    }
 };
