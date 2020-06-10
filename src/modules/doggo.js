@@ -3,7 +3,7 @@
 const fetch = require(`node-fetch`);
 
 module.exports = {
-    name: `doggy`,
+    name: `doggo`,
     description: `Sends random dog picture.`,
     args: 0,
     guildOnly: false,
