@@ -9,8 +9,13 @@ module.exports = {
     guildOnly: false,
     aliases: [`f`],
     async execute(msg) {
-        const response = await fetch(`https://randomfox.ca/floof/`, { redirect: `follow` });
-        const { image } = await response.json();
-        msg.channel.send({ files: [image] });
+        try {
+            const response = await fetch(`https://randomfox.ca/floof/`, { redirect: `follow` });
+            const { image } = await response.json();
+            msg.channel.send({ files: [image] });
+        } catch (e) {
+            msg.reply(`Error has occured!`);
+            console.error(e);
+        }
     }
 };

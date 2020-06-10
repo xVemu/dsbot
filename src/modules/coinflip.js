@@ -7,6 +7,6 @@ module.exports = {
     guildOnly: false,
     aliases: [`cf`],
     async execute(msg) {
-        msg.channel.send((Math.floor(Math.random() * 2) == 0) ? `heads` : `tails`);
+        msg.reply((Math.floor(Math.random() * 2) == 0) ? `heads` : `tails`);
     }
 };

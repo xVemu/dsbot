@@ -9,8 +9,13 @@ module.exports = {
     guildOnly: false,
     aliases: [`k`],
     async execute(msg) {
-        const response = await fetch(`https://api.thecatapi.com/v1/images/search`, { redirect: `follow` });
-        const {0: {url}} = await response.json();
-        msg.channel.send({files:[url]});
+        try {
+            const response = await fetch(`https://api.thecatapi.com/v1/images/search`, { redirect: `follow` });
+            const { 0: { url } } = await response.json();
+            msg.channel.send({ files: [url] });
+        } catch (e) {
+            msg.reply(`Error has occured!`);
+            console.error(e);
+        }
     }
 };

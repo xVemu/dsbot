@@ -3,7 +3,7 @@
 const Discord = require(`discord.js`),
     fs = require(`fs`),
     { token, prefix } = require(`../config.json`),
-    client = new Discord.Client({ presence: { activity: { name: `prefix: ?`}}});
+    client = new Discord.Client({ presence: { activity: { name: `prefix: ?` } } });
 
 client.cmds = new Discord.Collection();
 
@@ -30,7 +30,7 @@ client.on(`message`, msg => {
     if (cmd.guildOnly && msg.channel.type !== `text`) {
         return msg.reply(`I can't execute that command inside DMs!`);
     }
-    if (cmd.args > 0 && args.length != cmd.args) {
+    if (cmd.args > 0 && args.length < cmd.args) {
         let reply = `You didn't provide any arguments!`;
 
         if (cmd.usage) {

@@ -16,6 +16,6 @@ module.exports = {
         }
 
         const random = (Math.floor(Math.random() * range) + 1).toString();
-        msg.channel.send(random);
+        msg.reply(random);
     }
 };
