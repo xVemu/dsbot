@@ -22,7 +22,7 @@ client.on(`ready`, async () => {
 
 client.on(`message`, msg => {
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-    const args = msg.content.slice(prefix.length).split(/ +/);
+    const args = msg.content.slice(prefix.length).match(/[^\s"']+|"([^"]*)"/gmi).map(v => v.replace(/["']/g, ``));
     const cmdName = args.shift().toLowerCase();
     const cmd = client.cmds.get(cmdName)
         || client.cmds.find(cmd => cmd.aliases && cmd.aliases.includes(cmdName));
