@@ -10,7 +10,7 @@ module.exports = {
     aliases: [`f`],
     async execute(msg) {
         try {
-            const {data: { image }} = await axios.get(`https://randomfox.ca/floof/`);
+            const { data: { image } } = await axios.get(`https://randomfox.ca/floof/`);
             msg.channel.send({ files: [image] });
         } catch (e) {
             msg.reply(`Error has occured!`);
