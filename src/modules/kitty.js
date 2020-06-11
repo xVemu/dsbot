@@ -1,6 +1,6 @@
 `use strict`;
 
-const fetch = require(`node-fetch`);
+const axios = require(`axios`);
 
 module.exports = {
     name: `kitty`,
@@ -10,8 +10,7 @@ module.exports = {
     aliases: [`k`],
     async execute(msg) {
         try {
-            const response = await fetch(`https://api.thecatapi.com/v1/images/search`, { redirect: `follow` });
-            const { 0: { url } } = await response.json();
+            const {data: {0: { url }}} = await axios.get(`https://api.thecatapi.com/v1/images/search`);
             msg.channel.send({ files: [url] });
         } catch (e) {
             msg.reply(`Error has occured!`);

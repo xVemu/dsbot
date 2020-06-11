@@ -1,6 +1,6 @@
 `use strict`;
 
-const fetch = require(`node-fetch`);
+const axios = require(`axios`).default;
 
 module.exports = {
     name: `foxy`,
@@ -10,8 +10,7 @@ module.exports = {
     aliases: [`f`],
     async execute(msg) {
         try {
-            const response = await fetch(`https://randomfox.ca/floof/`, { redirect: `follow` });
-            const { image } = await response.json();
+            const {data: { image }} = await axios.get(`https://randomfox.ca/floof/`);
             msg.channel.send({ files: [image] });
         } catch (e) {
             msg.reply(`Error has occured!`);
