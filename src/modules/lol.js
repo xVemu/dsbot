@@ -21,8 +21,7 @@ module.exports = {
     guildOnly: false,
     async execute(msg, args) {
         try {
-            let region = ``;
-            args[1] == `euw` ? region = `euw1` : region = `eun1`;
+            const region = args[1] == `euw` ? `euw1` : `eun1`;
             const { id, name, summonerLevel, revisionDate } = await leagueJs.Summoner.gettingByName(args[0], region);
             const rank = await leagueJs.League.gettingEntriesForSummonerId(id, region);
             const embeded = new MessageEmbed()
