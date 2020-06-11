@@ -5,3 +5,4 @@ restart.sh
 screenlog.0
 .DS_Store
 config.json
+logf.log
