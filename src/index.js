@@ -22,14 +22,14 @@ client.on(`ready`, async () => {
 
 client.on(`message`, msg => {
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-    const args = msg.content.slice(prefix.length).match(/[^\s"']+|"([^"]*)"/gmi).map(v => v.replace(/["']/g, ``));
+    const argu = msg.content.slice(prefix.length).match(/[^\s"']+|"([^"]*)"/gmi);
+    if (!argu) return;
+    const args = argu.map(v => v.replace(/["']/g, ``));
     const cmdName = args.shift().toLowerCase();
     const cmd = client.cmds.get(cmdName)
         || client.cmds.find(cmd => cmd.aliases && cmd.aliases.includes(cmdName));
     if (!cmd) return;
-    if (cmd.guildOnly && msg.channel.type !== `text`) {
-        return msg.reply(`I can't execute that command inside DMs!`);
-    }
+    if (cmd.guildOnly && msg.channel.type !== `text`) return msg.reply(`I can't execute that command inside DMs!`);
     if (cmd.args > 0 && args.length < cmd.args) {
         let reply = `You didn't provide any arguments!`;
 
