@@ -41,7 +41,7 @@ module.exports = {
             if (e.message.startsWith(`Summoner name`)) msg.reply(e.message);
             else if (e.statusCode === 404) msg.reply(`Summoner not found!`);
             else {
-                msg.reply(`Error has occured!`);
+                msg.reply(`Error has occurred!`);
                 console.error(e);
             }
         }

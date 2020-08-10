@@ -10,11 +10,11 @@ module.exports = {
     aliases: [],
     async execute(msg) {
         try {
-            const { data: { nsfw, url, title }} = await axios.get(`https://meme-api.herokuapp.com/gimme`);
+            const { data: { nsfw, url, title } } = await axios.get(`https://meme-api.herokuapp.com/gimme`);
             if (nsfw && !msg.channel.nsfw) return this.execute(msg);
             msg.channel.send(title, { files: [url] });
         } catch (e) {
-            msg.reply(`Error has occured!`);
+            msg.reply(`Error has occurred!`);
             console.error(e);
         }
     }

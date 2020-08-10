@@ -15,7 +15,7 @@ module.exports = {
         try {
             const time = isNaN(args[1]) ? args[1] : 1;
             const member = msg.mentions.members.first();
-            if (!(member instanceof GuildMember)) return msg.reply(`It's not valid argument. Please use @tagget_user`);
+            if (!(member instanceof GuildMember)) return msg.reply(`It's not valid argument. Please use @tagged_user`);
             if (!member.voice.selfDeaf) return msg.reply(`User isn't self deafen!`);
             const channel1 = member.voice.channel;
             const channelList = msg.guild.channels.cache;
@@ -33,7 +33,7 @@ module.exports = {
         } catch (e) {
             if (e.message === `Target user is not connected to voice.`) msg.reply(e.message);
             else {
-                msg.reply(`Error has occured`);
+                msg.reply(`Error has occurred`);
                 console.error(e);
             }
         } finally {

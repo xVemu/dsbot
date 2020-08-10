@@ -72,7 +72,7 @@ module.exports = {
             if (e === `Cannot destructure property \`userId\` of 'undefined' or 'null'.`) msg.reply(`Player not found`);
             else if (e === `Cannot read property 'name' of undefined`) msg.reply(`Uncorrect operator's name`);
             else {
-                msg.reply(`Error has occured`);
+                msg.reply(`Error has occurred`);
                 console.error(e);
             }
         }

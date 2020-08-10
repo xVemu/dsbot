@@ -13,7 +13,7 @@ module.exports = {
             const { data: { image } } = await axios.get(`https://randomfox.ca/floof/`);
             msg.channel.send({ files: [image] });
         } catch (e) {
-            msg.reply(`Error has occured!`);
+            msg.reply(`Error has occurred!`);
             console.error(e);
         }
     }
