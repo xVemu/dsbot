@@ -45,7 +45,8 @@ module.exports = {
                     gadgets.set(gadget.name, gadget.value);
                 }
             } else if (nick) {
-                embeded.setTitle(username).setThumbnail(region.current.image);
+                embeded.setTitle(username);
+                if (region) embeded.setThumbnail(region.current.image);
                 const time = parseInt(general.playtime / 86400) + `d ` + (new Date(general.playtime % 86400 * 1000)).toUTCString().replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, `$1h $2m $3s`);
                 stats = {
                     Level: level,
@@ -54,9 +55,9 @@ module.exports = {
                     Kills: general.kills,
                     Deaths: general.deaths,
                     Accuracy: `${((general.bulletsConnected / general.bulletsFired) * 100).toFixed(2)}%`,
-                    Rank: region.current.name,
-                    "Wins/Loses": `${region.wins}/${region.losses}`,
-                    MMR: region.current.mmr
+                    Rank: region ? region.current.name : `None`,
+                    "Wins/Loses": region ? `${region.wins}/${region.losses}` : `None`,
+                    MMR: region ? region.current.mmr : `None`
                 };
             }
             for (const [key, value] of Object.entries(stats)) {

@@ -10,7 +10,7 @@ module.exports = {
     aliases: [`d`],
     async execute(msg) {
         try {
-            const { data: { 0: url } } = await axios.get(`https://api.thedogapi.com/v1/images/search`);
+            const { data: { 0: { url } } } = await axios.get(`https://api.thedogapi.com/v1/images/search`);
             msg.channel.send({ files: [url] });
         } catch (e) {
             msg.reply(`Error has occurred!`);

@@ -13,7 +13,7 @@ module.exports = {
     moving: true,
     async execute(msg, args) {
         try {
-            const time = isNaN(args[1]) ? args[1] : 1;
+            const time = (isNaN(args[1]) ? 1 : args[1]) * 1000;
             const member = msg.mentions.members.first();
             if (!(member instanceof GuildMember)) return msg.reply(`It's not valid argument. Please use @tagged_user`);
             if (!member.voice.selfDeaf) return msg.reply(`User isn't self deafen!`);
@@ -27,7 +27,7 @@ module.exports = {
             while (member.voice.selfDeaf && this.moving) {
                 await member.voice.setChannel(channel, `Hey, wake up!`);
                 channel = channel === channel1 ? channel2 : channel1;
-                await new Promise(r => setTimeout(r, time * 1000));
+                await new Promise(r => setTimeout(r, time));
             }
             await member.voice.setChannel(channel1, `Hey, wake up!`);
         } catch (e) {
