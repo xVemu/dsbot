@@ -1,20 +1,18 @@
-`use strict`;
+'use strict'
 
-const axios = require(`axios`).default;
+const axios = require('axios')
 
 module.exports = {
-    name: `foxy`,
-    description: `Sends random fox picture.`,
-    args: 0,
+    name: 'foxy',
+    description: 'Sends random fox picture.',
     guildOnly: false,
-    aliases: [`f`],
     async execute(msg) {
         try {
-            const { data: { image } } = await axios.get(`https://randomfox.ca/floof/`);
-            msg.channel.send({ files: [image] });
+            const { data: { image } } = await axios.get('https://randomfox.ca/floof/')
+            await msg.reply({ content: 'Here\'s your foxy', files: [image] })
         } catch (e) {
-            msg.reply(`Error has occurred!`);
-            console.error(e);
+            await msg.reply('Error has occurred!', { ephemeral: true })
+            console.error(e)
         }
-    }
-};
+    },
+}

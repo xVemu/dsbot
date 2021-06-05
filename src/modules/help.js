@@ -1,38 +1,46 @@
-`use strict`;
+'use strict'
 
-const { prefix } = require(`../../config.json`);
-
+const { prefix } = require('../../config.json')
+// const cmds = require('../index')
 module.exports = {
-    name: `help`,
-    description: `List all of my commands or info about a specific command.`,
-    args: 0,
+    name: 'help',
+    description: 'List all of my commands or info about a specific command.',
     guildOnly: false,
-    aliases: [`commands`, `h`],
-    usage: `(command name)`,
+    options: [{
+        type: 'STRING',
+        name: 'command',
+        description: 'Command name',
+        required: false,
+        /*TODO choices: cmds.map((_, key) => ({
+            name: key,
+            value: key,
+        })),*/
+    }],
     async execute(msg, args) {
-        const data = [];
-        const { cmds } = msg.client;
+        const data = []
+        const { cmds } = msg.client
 
         if (!args.length) {
-            data.push(`Here's a list of all my commands:`);
-            data.push(cmds.map(command => command.name).join(`, `));
-            data.push(`\nYou can send \`${prefix}help (command name)\` to get info on a specific command!`);
+            data.push('Here\'s a list of all my commands:')
+            data.push(cmds.map(command => command.name).join(', '))
+            data.push(`\nYou can send \`${prefix}help (command name)\` to get info on a specific command!`)
 
-            return msg.channel.send(data, { split: true });
+            return await msg.reply(data.join('\n'), { ephemeral: true })
         }
-        const name = args[0].toLowerCase();
-        const command = cmds.get(name) || cmds.find(c => c.aliases && c.aliases.includes(name));
+        const name = (args[0].value ?? args[0]).toLowerCase()
+        const cmd = cmds.get(name)
 
-        if (!command) {
-            return msg.reply(`that's not a valid command!`);
+        if (!cmd) {
+            return await msg.reply('that\'s not a valid command!', { ephemeral: true })
         }
 
-        data.push(`Name: ${command.name}`);
+        data.push(`Name: ${cmd.name}`)
 
-        if (command.aliases) data.push(`Aliases: ${command.aliases.join(`, `)}`);
-        if (command.description) data.push(`Description: ${command.description}`);
-        if (command.usage) data.push(`Usage: ${prefix}${command.name} ${command.usage}`);
+        if (cmd.description) data.push(`Description: ${cmd.description}`)
+        if (cmd.options) data.push(`Params:\n${cmd.options
+            .map(value => `${value.name} - ${value.description} - required ${value.required ? '✅' : '❌'}`)
+            .join('\n')}`)
 
-        msg.channel.send(data, { split: true });
-    }
-};
+        await msg.reply(data.join('\n'), { ephemeral: true })
+    },
+}

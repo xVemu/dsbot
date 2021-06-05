@@ -1,43 +1,54 @@
-`use strict`;
+'use strict'
 
-const { GuildMember } = require(`discord.js`);
+const {CommandInteraction} = require('discord.js')
+const { GuildMember } = require('discord.js')
 
 
 module.exports = {
-    name: `move`,
-    description: `Hey, wake up!`,
-    args: 1,
-    usage: `<nick> (delay[default: 1s])`,
+    name: 'move',
+    description: 'Hey, wake up!',
+    options: [
+        {
+            type: 'USER',
+            name: 'user',
+            description: 'User you want to move',
+            required: true,
+        },
+        {
+            type: 'STRING',
+            name: 'delay',
+            description: 'Delay between moving',
+            required: false,
+        },
+    ],
     guildOnly: true,
-    aliases: [`m`],
-    moving: true,
-    async execute(msg, args) {
+    shouldMoving: false,
+    async execute(msg, [userArg, delayArg]) {
         try {
-            const time = (isNaN(args[1]) ? 1 : args[1]) * 1000;
-            const member = msg.mentions.members.first();
-            if (!(member instanceof GuildMember)) return msg.reply(`It's not valid argument. Please use @tagged_user`);
-            if (!member.voice.selfDeaf && args[1] !== `!`) return msg.reply(`User isn't self deafen!`);
-            const channel1 = member.voice.channel;
-            const channelList = msg.guild.channels.cache;
-            let channel2 = msg.guild.afkChannel;
-            if (!channel2) channel2 = (channelList.find(v => v.type == `voice` && v.members.size === 0 && v.permissionsFor(member).has(`CONNECT`)) ||
-                channelList.find(v => v != channel1 && v.type == `voice` && v.permissionsFor(member).has(`CONNECT`)));
-            if (!channel2) return msg.reply(`Haven't found right channel!`);
-            let channel = channel2;
-            while ((member.voice.selfDeaf || args[1] === `!`) && this.moving) {
-                await member.voice.setChannel(channel, `Hey, wake up!`);
-                channel = channel === channel1 ? channel2 : channel1;
-                await new Promise(r => setTimeout(r, time));
+            const delay = (isNaN(delayArg?.value ?? delayArg) ? 1 : (delayArg.value ?? delayArg)) * 1000
+            const member = userArg.member ?? msg.mentions.members.first()
+            if (!(member instanceof GuildMember)) return await msg.reply('It\'s not valid argument. Please use @tagged_user', {ephemeral: true})
+            if (!member.voice.selfDeaf && delayArg !== `!`) return await msg.reply('User isn\'t self deafen!', {ephemeral: true})
+            const memberChannel = member.voice.channel
+            const channels = msg.guild.channels.cache
+            let channelMoveTo = msg.guild.afkChannel
+            if (!channelMoveTo) channelMoveTo = (channels.find(v => v.type === 'voice' && v.members.size === 0 && v.permissionsFor(member).has('CONNECT')) ||
+                channels.find(v => v !== memberChannel && v.type === 'voice' && v.permissionsFor(member).has('CONNECT')))
+            if (!channelMoveTo) return await msg.reply('Haven\'t found right channel!', {ephemeral: true})
+            if (msg instanceof CommandInteraction)
+                await msg.reply(':ok_hand:', {ephemeral: true})
+            let channel = channelMoveTo
+            this.shouldMoving = true
+            while ((member.voice.selfDeaf || delayArg === '!') && this.shouldMoving) {
+                await member.voice.setChannel(channel, 'Hey, wake up!')
+                channel = channel === memberChannel ? channelMoveTo : memberChannel
+                await new Promise(r => setTimeout(r, delay))
             }
-            await member.voice.setChannel(channel1, `Hey, wake up!`);
+            await member.voice.setChannel(memberChannel, 'Hey, wake up!')
         } catch (e) {
-            if (e.message === `Target user is not connected to voice.`) msg.reply(e.message);
-            else {
-                msg.reply(`Error has occurred`);
-                console.error(e);
-            }
+            msg.reply(e.message === 'Target user is not connected to voice.' ? e.message : 'Error has occurred', {ephemeral: true})
         } finally {
-            this.moving = true;
+            this.shouldMoving = false
         }
-    }
-};
+    },
+}
