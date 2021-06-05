@@ -1,13 +1,15 @@
-`use strict`;
+'use strict'
 
+const {CommandInteraction} = require('discord.js')
 
 module.exports = {
-    name: `stop`,
-    description: `Stops moving!`,
-    args: 0,
+    name: 'stop',
+    description: 'Stops moving!',
     guildOnly: true,
-    aliases: [`s`],
-    async execute() {
-        require(`./move`).moving = false;
+    async execute(msg) {
+        require('./move').shouldMoving = false
+        if (msg instanceof CommandInteraction)
+            await msg.reply(':ok_hand:', {ephemeral: true})
     }
-};
+    ,
+}

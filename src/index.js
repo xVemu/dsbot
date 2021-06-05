@@ -1,51 +1,65 @@
-`use strict`;
+'use strict'
 
-const Discord = require(`discord.js`),
-    fs = require(`fs`),
-    { token, prefix } = require(`../config.json`),
-    client = new Discord.Client({ presence: { activity: { name: `prefix: ?` } } });
+// https://discord.com/api/oauth2/authorize?client_id=538290561677918233&permissions=16780352&scope=bot%20applications.commands
+// https://discord.com/api/oauth2/authorize?client_id=516250691069804544&permissions=16780352&scope=bot%20applications.commands
+const Discord = require('discord.js'),
+    fs = require('fs'),
+    { token, prefix } = require('../config.json'),
+    client = new Discord.Client({
+        presence: {
+            activities: [
+                {
+                    name: `Prefix: ${prefix}`,
+                },
+            ],
+        },
+        intents: [
+            Discord.Intents.FLAGS.GUILD_VOICE_STATES,
+            Discord.Intents.FLAGS.GUILDS,
+            Discord.Intents.FLAGS.GUILD_MESSAGES,
+            Discord.Intents.FLAGS.DIRECT_MESSAGES,
+        ],
+    })
 
-client.cmds = new Discord.Collection();
+client.cmds = new Discord.Collection()
 
-const cmdFiles = fs.readdirSync(`src/modules`).filter(file => file.endsWith(`.js`));
+const cmdFiles = fs.readdirSync('src/modules').filter(file => file.endsWith('.js'))
 
 for (const file of cmdFiles) {
-    const cmd = require(`./modules/${file}`);
-    client.cmds.set(cmd.name, cmd);
+    const cmd = require(`./modules/${file}`)
+    client.cmds.set(cmd.name, cmd)
 }
 
-client.on(`ready`, async () => {
+client.on('ready', async () => {
     console.log(`Logged in as
     \n${client.user.username}
-    \n${client.user.id}`);
-});
+    \n${client.user.id}`)
+    await client.application?.commands.set([...client.cmds.values()])
+})
 
-client.on(`message`, msg => {
-    if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-    const argu = msg.content.slice(prefix.length).match(/[^\s"']+|"([^"]*)"/gmi);
-    if (!argu) return;
-    const args = argu.map(v => v.replace(/["']/g, ``));
-    const cmdName = args.shift().toLowerCase();
+client.on('interaction', async interaction => {
+    if (!interaction.isCommand()) return
+    const command = client.cmds.get(interaction.commandName)
+    await command.execute(interaction, interaction.options)
+})
+
+client.on('message', async msg => {
+    if (!msg.content.startsWith(prefix) || msg.author.bot) return
+    const argu = msg.content.slice(prefix.length).match(/[^\s"']+|"([^"]*)"/gmi)
+    if (!argu) return
+    const args = argu.map(v => v.replace(/["']/g, ''))
+    const cmdName = args.shift().toLowerCase()
     const cmd = client.cmds.get(cmdName)
-        || client.cmds.find(cmd => cmd.aliases && cmd.aliases.includes(cmdName));
-    if (!cmd) return;
-    if (cmd.guildOnly && msg.channel.type !== `text`) return msg.reply(`I can't execute that command inside DMs!`);
-    if (cmd.args > 0 && args.length < cmd.args) {
-        let reply = `You didn't provide any arguments!`;
+    if (!cmd) return
+    if (cmd.guildOnly && msg.channel.type !== 'text') return msg.reply('I can\'t execute that command inside DMs!')//TODO guildOnly
+    if (args.length < cmd.options?.filter(v => v.required).length) return msg.reply('You didn\'t provide enough arguments!')
 
-        if (cmd.usage) {
-            reply += `\nThe proper usage would be: \`${prefix}${cmd.name} ${cmd.usage}\``;
-        }
-
-        return msg.reply(reply);
-    }
     try {
-        cmd.execute(msg, args);
-        return;
+        cmd.execute(msg, args)
     }
     catch (e) {
-        console.error(e);
+        console.error(e)
     }
-});
+})
 
-client.login(token);
+client.login(token)

@@ -1,20 +1,18 @@
-`use strict`;
+'use strict'
 
-const axios = require(`axios`).default;
+const axios = require('axios')
 
 module.exports = {
-    name: `doggo`,
-    description: `Sends random dog picture.`,
-    args: 0,
+    name: 'doggo',
+    description: 'Sends random dog picture.',
     guildOnly: false,
-    aliases: [`d`],
     async execute(msg) {
         try {
-            const { data: { 0: { url } } } = await axios.get(`https://api.thedogapi.com/v1/images/search`);
-            msg.channel.send({ files: [url] });
+            const { data: { 0: { url } } } = await axios.get('https://api.thedogapi.com/v1/images/search')
+            await msg.reply({ content: 'Here\'s your doggo', files: [url] })
         } catch (e) {
-            msg.reply(`Error has occurred!`);
-            console.error(e);
+            await msg.reply('Error has occurred!', { ephemeral: true })
+            console.error(e)
         }
-    }
-};
+    },
+}
