@@ -16,7 +16,7 @@ module.exports = {
             const time = (isNaN(args[1]) ? 1 : args[1]) * 1000;
             const member = msg.mentions.members.first();
             if (!(member instanceof GuildMember)) return msg.reply(`It's not valid argument. Please use @tagged_user`);
-            if (!member.voice.selfDeaf) return msg.reply(`User isn't self deafen!`);
+            if (!member.voice.selfDeaf && args[1] !== `!`) return msg.reply(`User isn't self deafen!`);
             const channel1 = member.voice.channel;
             const channelList = msg.guild.channels.cache;
             let channel2 = msg.guild.afkChannel;
@@ -24,7 +24,7 @@ module.exports = {
                 channelList.find(v => v != channel1 && v.type == `voice` && v.permissionsFor(member).has(`CONNECT`)));
             if (!channel2) return msg.reply(`Haven't found right channel!`);
             let channel = channel2;
-            while (member.voice.selfDeaf && this.moving) {
+            while ((member.voice.selfDeaf || args[1] === `!`) && this.moving) {
                 await member.voice.setChannel(channel, `Hey, wake up!`);
                 channel = channel === channel1 ? channel2 : channel1;
                 await new Promise(r => setTimeout(r, time));
