@@ -25,22 +25,22 @@ module.exports = {
             data.push(cmds.map(command => command.name).join(', '))
             data.push(`\nYou can send \`${prefix}help (command name)\` to get info on a specific command!`)
 
-            return await msg.reply(data.join('\n'), { ephemeral: true })
+            return await msg.reply({ content: data.join('\n'), ephemeral: true })
         }
         const name = (args[0].value ?? args[0]).toLowerCase()
         const cmd = cmds.get(name)
 
         if (!cmd) {
-            return await msg.reply('that\'s not a valid command!', { ephemeral: true })
+            return await msg.reply({content: 'that\'s not a valid command!', ephemeral: true })
         }
 
         data.push(`Name: ${cmd.name}`)
 
         if (cmd.description) data.push(`Description: ${cmd.description}`)
         if (cmd.options) data.push(`Params:\n${cmd.options
-            .map(value => `${value.name} - ${value.description} - required ${value.required ? '✅' : '❌'}`)
+            .map(value => `${value.name} - ${value.description} - required ${value.required ? '✓' : '✗'}`)
             .join('\n')}`)
 
-        await msg.reply(data.join('\n'), { ephemeral: true })
+        await msg.reply({content: data.join('\n'), ephemeral: true })
     },
 }

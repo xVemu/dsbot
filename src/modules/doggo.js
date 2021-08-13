@@ -9,9 +9,9 @@ module.exports = {
     async execute(msg) {
         try {
             const { data: { 0: { url } } } = await axios.get('https://api.thedogapi.com/v1/images/search')
-            await msg.reply({ content: 'Here\'s your doggo', files: [url] })
+            await msg.reply({ files: [url] })
         } catch (e) {
-            await msg.reply('Error has occurred!', { ephemeral: true })
+            await msg.reply({ content: 'Error has occurred!', ephemeral: true })
             console.error(e)
         }
     },

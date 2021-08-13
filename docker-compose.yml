@@ -1,0 +1,6 @@
+services:
+  dsbot:
+    build: .
+    restart: on-failure
+    tty: true
+    stdin_open: true

@@ -9,8 +9,8 @@ module.exports = {
     async execute(msg) {
         try {
             const { data: { nsfw, url, title } } = await axios.get('https://meme-api.herokuapp.com/gimme')
-            if (nsfw && !msg.channel.nsfw) return this.execute(msg) //TODO
-            await msg.reply(title, { files: [url] })
+            if (nsfw && !msg.channel.nsfw) return this.execute(msg)
+            await msg.reply({ content: title, files: [url] })
         } catch (e) {
             await msg.reply('Error has occurred!')
             console.error(e)

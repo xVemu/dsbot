@@ -9,7 +9,10 @@ module.exports = {
     async execute(msg) {
         require('./move').shouldMoving = false
         if (msg instanceof CommandInteraction)
-            await msg.reply(':ok_hand:', {ephemeral: true})
-    }
-    ,
+            await msg.reply('Stopped')
+    },
+    async buttonClick(interaction) {
+        require('./move').shouldMoving = false
+        await interaction.message.delete()
+    },
 }
