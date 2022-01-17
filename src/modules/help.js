@@ -1,6 +1,6 @@
 'use strict'
 
-const { prefix } = require('../../config.json')
+const {prefix} = require('../../config.json')
 // const cmds = require('../index')
 module.exports = {
     name: 'help',
@@ -18,21 +18,19 @@ module.exports = {
     }],
     async execute(msg, args) {
         const data = []
-        const { cmds } = msg.client
+        const {cmds} = msg.client
 
         if (!args.length) {
             data.push('Here\'s a list of all my commands:')
             data.push(cmds.map(command => command.name).join(', '))
             data.push(`\nYou can send \`${prefix}help (command name)\` to get info on a specific command!`)
 
-            return await msg.reply({ content: data.join('\n'), ephemeral: true })
+            return await msg.reply({content: data.join('\n'), ephemeral: true})
         }
         const name = (args[0].value ?? args[0]).toLowerCase()
         const cmd = cmds.get(name)
 
-        if (!cmd) {
-            return await msg.reply({content: 'that\'s not a valid command!', ephemeral: true })
-        }
+        if (!cmd) return await msg.reply({content: 'that\'s not a valid command!', ephemeral: true})
 
         data.push(`Name: ${cmd.name}`)
 
@@ -41,6 +39,6 @@ module.exports = {
             .map(value => `${value.name} - ${value.description} - required ${value.required ? '✓' : '✗'}`)
             .join('\n')}`)
 
-        await msg.reply({content: data.join('\n'), ephemeral: true })
+        await msg.reply({content: data.join('\n'), ephemeral: true})
     },
 }

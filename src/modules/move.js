@@ -27,12 +27,18 @@ module.exports = {
         try {
             const delay = (isNaN(delayArg?.value ?? delayArg) ? 1 : (delayArg.value ?? delayArg)) * 1000
             const member = userArg.member ?? msg.mentions.members.first()
-            if (!(member instanceof GuildMember)) return await msg.reply({content: 'It\'s not valid argument. Please use @tagged_user', ephemeral: true})
-            if (!member.voice.selfDeaf && delayArg !== '!') return await msg.reply({content: 'User isn\'t self deafen!', ephemeral: true})
+            if (!(member instanceof GuildMember)) return await msg.reply({
+                content: 'It\'s not valid argument. Please use @tagged_user',
+                ephemeral: true,
+            })
+            if (!member.voice.selfDeaf && delayArg !== '!') return await msg.reply({
+                content: 'User isn\'t self deafen!',
+                ephemeral: true,
+            })
             const memberChannel = member.voice.channel
             const channels = msg.guild.channels.cache
             let channelMoveTo = msg.guild.afkChannel
-            if (!channelMoveTo) channelMoveTo = (channels.find(v => v.isVoice() && v.members.size === 0 && v.permissionsFor(member).has(Permissions.FLAGS.CONNECT)) ||
+            channelMoveTo ??= (channels.find(v => v.isVoice() && v.members.size === 0 && v.permissionsFor(member).has(Permissions.FLAGS.CONNECT)) ||
                 channels.find(v => v !== memberChannel && v.isVoice() && v.permissionsFor(member).has(Permissions.FLAGS.CONNECT)))
             if (!channelMoveTo) return await msg.reply({content: 'Haven\'t found right channel!', ephemeral: true})
             const row = new MessageActionRow()
@@ -52,9 +58,12 @@ module.exports = {
             }
             await member.voice.setChannel(memberChannel, 'Hey, wake up!')
         } catch (e) {
-            if (e.message === 'Target user is not connected to voice.') await msg.reply({content: e.message, ephemeral: true})
+            if (e.message === 'Target user is not connected to voice.') await msg.reply({
+                content: e.message,
+                ephemeral: true,
+            })
             else {
-                await msg.reply({ content: 'Error has occurred!', ephemeral: true })
+                await msg.reply({content: 'Error has occurred!', ephemeral: true})
                 console.error(e)
             }
         } finally {

@@ -8,10 +8,10 @@ module.exports = {
     guildOnly: false,
     async execute(msg) {
         try {
-            const { data: { image } } = await axios.get('https://randomfox.ca/floof/')
-            await msg.reply({ files: [image] })
+            const {data: {image}} = await axios.get('https://randomfox.ca/floof/')
+            await msg.reply({files: [image]})
         } catch (e) {
-            await msg.reply({ content: 'Error has occurred!', ephemeral: true })
+            await msg.reply({content: 'Error has occurred!', ephemeral: true})
             console.error(e)
         }
     },

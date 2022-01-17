@@ -19,7 +19,7 @@ https://discord.com/oauth2/authorize?client_id=516250691069804544&scope=bot&perm
 * `?lol` - Sends info about player in League Of Legends.
 * `?r6` - Sends info about player in Rainbow Six Siege.
 ## Moving:
-* `?move` - It can wake up you friend by moving them from channel he was to a random channel until he unmute.
+* `?move` - It can wake up you friend by moving them from channel he was to a random channel until he unmutes.
 * `?stop` - Stops moving!
 ## Usefull:
 * `?poll` - Creates a simple poll.

@@ -4,7 +4,7 @@
 // https://discord.com/api/oauth2/authorize?client_id=516250691069804544&permissions=16780352&scope=bot%20applications.commands
 const Discord = require('discord.js'),
     fs = require('fs'),
-    { token, prefix } = require('../config.json'),
+    {token, prefix} = require('../config.json'),
     client = new Discord.Client({
         presence: {
             activities: [
@@ -37,7 +37,7 @@ client.on('ready', async () => {
     console.log(`Logged in as
     \n${client.user.username}
     \n${client.user.id}`)
-    // await client.guilds.cache.get('501826205180231691').commands.set([...client.cmds.values()]) its for testing on my server
+    // await client.guilds.cache.get('501826205180231691').commands.set([...client.cmds.values()]) //It's for testing on my server
     await client.application?.commands.set([...client.cmds.values()])
 })
 
@@ -62,8 +62,7 @@ client.on('messageCreate', async msg => {
 
     try {
         cmd.execute(msg, args)
-    }
-    catch (e) {
+    } catch (e) {
         console.error(e)
     }
 })
