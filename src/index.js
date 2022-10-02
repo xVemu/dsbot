@@ -2,10 +2,10 @@
 
 //CANARY  https://discord.com/api/oauth2/authorize?client_id=538290561677918233&permissions=16780352&scope=bot%20applications.commands
 // https://discord.com/api/oauth2/authorize?client_id=516250691069804544&permissions=16780352&scope=bot%20applications.commands
-const Discord = require('discord.js'),
+const {Client, GatewayIntentBits, Partials, Collection} = require('discord.js'),
     fs = require('fs'),
     {token, prefix} = require('../config.json'),
-    client = new Discord.Client({
+    client = new Client({
         presence: {
             activities: [
                 {
@@ -14,17 +14,17 @@ const Discord = require('discord.js'),
             ],
         },
         intents: [
-            Discord.Intents.FLAGS.GUILD_VOICE_STATES,
-            Discord.Intents.FLAGS.GUILDS,
-            Discord.Intents.FLAGS.GUILD_MESSAGES,
-            Discord.Intents.FLAGS.DIRECT_MESSAGES,
+            GatewayIntentBits.GuildVoiceStates,
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.DirectMessages,
         ],
         partials: [
-            'CHANNEL',
+            Partials.Channel,
         ],
     })
 
-client.cmds = new Discord.Collection()
+client.cmds = new Collection()
 
 const cmdFiles = fs.readdirSync('src/modules').filter(file => file.endsWith('.js'))
 

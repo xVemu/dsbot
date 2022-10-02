@@ -1,7 +1,7 @@
 'use strict'
 
 const R6API = require('r6api.js').default,
-    {MessageEmbed, CommandInteraction} = require('discord.js'),
+    {EmbedBuilder, CommandInteraction, ApplicationCommandOptionType} = require('discord.js'),
     {r6mail, r6psw} = require('../../config.json'),
     platform = 'uplay',
     R6 = new R6API({
@@ -15,13 +15,13 @@ module.exports = {
     guildOnly: false,
     options: [
         {
-            type: 'STRING',
+            type: ApplicationCommandOptionType.String,
             name: 'nick',
             description: 'player\'s nick',
             required: true,
         },
         {
-            type: 'STRING',
+            type: ApplicationCommandOptionType.String,
             name: 'operator',
             description: 'operator\'s name',
             required: false,
@@ -46,7 +46,7 @@ module.exports = {
                 {0: {seasons}} = await R6.getRanks(platform, userId, {seasonIds: -1, boardIds: 'pvp_ranked'}),
                 region = Object.values(seasons)[0].regions.emea.boards.pvp_ranked
             let stats = {}
-            const embedded = new MessageEmbed()
+            const embedded = new EmbedBuilder()
                 .setColor(0x808080)
                 .setAuthor({
                     name: 'Rainbow Six Siege Stats',
@@ -90,9 +90,8 @@ module.exports = {
                     'Lootbox Chance': percent,
                 }
             }
-            for (const [key, value] of Object.entries(stats)) {
-                embedded.addField(key, value.toString(), true)
-            }
+            const fields = Object.entries(stats).map(([name, value]) => ({name, value: value.toString(), inline: true}))
+            embedded.addFields(fields)
             if (msg instanceof CommandInteraction)
                 return await msg.editReply({embeds: [embedded]})
             await msg.reply({embeds: [embedded]})

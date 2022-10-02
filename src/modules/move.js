@@ -1,6 +1,14 @@
 'use strict'
 
-const {Permissions, GuildMember, MessageActionRow, MessageButton} = require('discord.js'),
+const {
+        PermissionsBitField,
+        GuildMember,
+        ActionRowBuilder,
+        ButtonBuilder,
+        ApplicationCommandOptionType,
+        ChannelType,
+        ButtonStyle,
+    } = require('discord.js'),
     sleep = require('util').promisify(setTimeout)
 
 
@@ -9,13 +17,13 @@ module.exports = {
     description: 'Hey, wake up!',
     options: [
         {
-            type: 'USER',
+            type: ApplicationCommandOptionType.User,
             name: 'user',
             description: 'User you want to move',
             required: true,
         },
         {
-            type: 'STRING',
+            type: ApplicationCommandOptionType.String,
             name: 'delay',
             description: 'Delay between moving',
             required: false,
@@ -38,15 +46,15 @@ module.exports = {
             const memberChannel = member.voice.channel
             const channels = msg.guild.channels.cache
             let channelMoveTo = msg.guild.afkChannel
-            channelMoveTo ??= (channels.find(v => v.isVoice() && v.members.size === 0 && v.permissionsFor(member).has(Permissions.FLAGS.CONNECT)) ||
-                channels.find(v => v !== memberChannel && v.isVoice() && v.permissionsFor(member).has(Permissions.FLAGS.CONNECT)))
+            channelMoveTo ??= (channels.find(v => v.type === ChannelType.GuildVoice && v.members.size === 0 && v.permissionsFor(member).has(PermissionsBitField.Flags.Connect)) ||
+                channels.find(v => v !== memberChannel && v.type === ChannelType.GuildVoice && v.permissionsFor(member).has(PermissionsBitField.Flags.Connect)))
             if (!channelMoveTo) return await msg.reply({content: 'Haven\'t found right channel!', ephemeral: true})
-            const row = new MessageActionRow()
+            const row = new ActionRowBuilder()
                 .addComponents(
-                    new MessageButton()
+                    new ButtonBuilder()
                         .setCustomId('stop')
                         .setLabel('STOP')
-                        .setStyle('DANGER'),
+                        .setStyle(ButtonStyle.Danger),
                 )
             await msg.reply({content: 'Moving!', components: [row]})
             let channel = channelMoveTo

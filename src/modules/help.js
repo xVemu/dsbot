@@ -1,13 +1,14 @@
 'use strict'
 
 const {prefix} = require('../../config.json')
+const {ApplicationCommandOptionType} = require('discord.js')
 // const cmds = require('../index')
 module.exports = {
     name: 'help',
     description: 'List all of my commands or info about a specific command.',
     guildOnly: false,
     options: [{
-        type: 'STRING',
+        type: ApplicationCommandOptionType.String,
         name: 'command',
         description: 'Command name',
         required: false,
