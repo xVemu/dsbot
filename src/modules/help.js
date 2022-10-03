@@ -1,8 +1,7 @@
 'use strict'
 
-const {prefix} = require('../../config.json')
 const {ApplicationCommandOptionType} = require('discord.js')
-// const cmds = require('../index')
+
 module.exports = {
     name: 'help',
     description: 'List all of my commands or info about a specific command.',
@@ -16,18 +15,18 @@ module.exports = {
             value: key,
         })),*/
     }],
-    async execute(msg, args) {
+    async execute(msg, [command]) {
         const data = []
         const {cmds} = msg.client
 
-        if (!args.length) {
+        if (!command) {
             data.push('Here\'s a list of all my commands:')
             data.push(cmds.map(command => command.name).join(', '))
-            data.push(`\nYou can send \`${prefix}help (command name)\` to get info on a specific command!`)
+            data.push('\nYou can send `/help (command name)` to get info on a specific command!')
 
             return await msg.reply({content: data.join('\n'), ephemeral: true})
         }
-        const name = (args[0].value ?? args[0]).toLowerCase()
+        const name = command.value.toLowerCase()
         const cmd = cmds.get(name)
 
         if (!cmd) return await msg.reply({content: 'that\'s not a valid command!', ephemeral: true})

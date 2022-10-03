@@ -48,8 +48,7 @@ module.exports = {
     ],
     async execute(msg, [nameArg, regionArg]) {
         try {
-            const region = regions[((regionArg?.value ?? regionArg))?.toUpperCase()] ?? regions['EUNE']
-            const nick = nameArg.value ?? nameArg
+            const region = regions[regionArg?.value.toUpperCase()] ?? regions['EUNE']
             const baseURL = `https://${region}.api.riotgames.com/`
             const {
                 data: {
@@ -58,7 +57,7 @@ module.exports = {
                     summonerLevel,
                     profileIconId,
                 },
-            } = await axios.get(`${baseURL}lol/summoner/v4/summoners/by-name/${nick}`)
+            } = await axios.get(`${baseURL}lol/summoner/v4/summoners/by-name/${nameArg.value}`)
             const {data: rank} = await axios.get(`${baseURL}lol/league/v4/entries/by-summoner/${id}`)
             const embedded = new EmbedBuilder({
                 title: name,
@@ -88,8 +87,7 @@ module.exports = {
         } catch (e) {
             if (e.response.status === 404)
                 return await msg.reply({content: 'Summoner not found!', ephemeral: true})
-            await msg.reply({content: 'Error has occurred!', ephemeral: true})
-            console.error(e)
+            throw new Error('League api')
         }
     },
 }
