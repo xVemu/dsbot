@@ -20,8 +20,8 @@ module.exports = {
         },
     ],
     async execute(msg, [option1, option2]) {
-        const message = `✅ - ${option1.value ?? option1} \n❌ - ${option2.value ?? option2}`
-        const sent = await msg.reply({content: message, fetchReply: true}) ?? await msg.fetchReply()
+        const message = `✅ - ${option1.value} \n❌ - ${option2.value}`
+        const sent = await msg.reply({content: message, fetchReply: true})
         sent.react('✅')
         sent.react('❌')
     },

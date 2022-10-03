@@ -12,7 +12,7 @@ module.exports = {
         required: true,
     }],
     async execute(msg, [range]) {
-        const maxNumber = range.value ?? parseInt(range)
+        const maxNumber = range.value
 
         if (isNaN(maxNumber))
             return await msg.reply('that doesn\'t seem to be a valid number.')

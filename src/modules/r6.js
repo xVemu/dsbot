@@ -29,9 +29,7 @@ module.exports = {
     async execute(msg, [nickArg, operatorArg]) {
         try {
             if (msg instanceof CommandInteraction) await msg.deferReply()
-            const nick = nickArg.value ?? nickArg
-            const operatorName = operatorArg?.value ?? operatorArg
-            const {0: {userId, username, avatar}} = await R6.findByUsername(platform, nick),
+            const {0: {userId, username, avatar}} = await R6.findByUsername(platform, nickArg.value),
                 {0: {level, xp, lootboxProbability: {percent}}} = await R6.getProgression(platform, userId),
                 {
                     0: {
@@ -56,8 +54,8 @@ module.exports = {
                 },
                 timestamp: Date.now(),
             })
-            if (operatorName) {
-                const operator = Object.values(operators).find(operator => operator.name === operatorName)
+            if (operatorArg) {
+                const operator = Object.values(operators).find(operator => operator.name === operatorArg.value)
                 embedded.setTitle(`${username}/${operator.name}`).setThumbnail(operator.icon)
                 const time = parseInt(operator.playtime / 86400) + 'd ' + (new Date(operator.playtime % 86400 * 1000)).toUTCString().replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, '$1h $2m $3s')
                 stats = {
@@ -100,10 +98,7 @@ module.exports = {
         } catch (e) {
             if (e === 'Cannot read property \'userId\' of undefined') await msg.reply('Player not found')
             else if (e === 'Cannot read property \'name\' of undefined') await msg.reply('Uncorrect operator\'s name')
-            else {
-                await msg.reply('Error has occurred')
-                console.error(e)
-            }
+            throw new Error('r6 api error')
         }
     },
 }

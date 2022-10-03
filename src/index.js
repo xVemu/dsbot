@@ -38,8 +38,6 @@ client.on('interactionCreate', async interaction => {
 
     const cmd = client.cmds.get(interaction.commandName)
 
-    // if (cmd.guildOnly && interaction.channel.type === ChannelType.DM) return await interaction.reply('I can\'t execute that command inside DMs!')
-
     try {
         await cmd.execute(interaction, interaction.options.data)
     } catch (e) {

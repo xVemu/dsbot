@@ -2,6 +2,7 @@
 
 const {CommandInteraction} = require('discord.js')
 
+/*TODO*/
 module.exports = {
     name: 'stop',
     description: 'Stops moving!',
