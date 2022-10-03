@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="index.js" type="NodeJSConfigurationType" path-to-node="wsl://Arch@/usr/local/bin/node" nameIsGenerated="true" path-to-js-file="src/index.js" working-dir="$PROJECT_DIR$">
-    <method v="2" />
-  </configuration>
-</component>

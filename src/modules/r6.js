@@ -1,7 +1,7 @@
 'use strict'
 
 const R6API = require('r6api.js').default,
-    {MessageEmbed, CommandInteraction} = require('discord.js'),
+    {EmbedBuilder, CommandInteraction, ApplicationCommandOptionType} = require('discord.js'),
     {r6mail, r6psw} = require('../../config.json'),
     platform = 'uplay',
     R6 = new R6API({
@@ -15,13 +15,13 @@ module.exports = {
     guildOnly: false,
     options: [
         {
-            type: 'STRING',
+            type: ApplicationCommandOptionType.String,
             name: 'nick',
             description: 'player\'s nick',
             required: true,
         },
         {
-            type: 'STRING',
+            type: ApplicationCommandOptionType.String,
             name: 'operator',
             description: 'operator\'s name',
             required: false,
@@ -46,14 +46,17 @@ module.exports = {
                 {0: {seasons}} = await R6.getRanks(platform, userId, {seasonIds: -1, boardIds: 'pvp_ranked'}),
                 region = Object.values(seasons)[0].regions.emea.boards.pvp_ranked
             let stats = {}
-            const embedded = new MessageEmbed()
-                .setColor(0x808080)
-                .setAuthor({
+            const embedded = new EmbedBuilder({
+                color: 0x808080,
+                author: {
                     name: 'Rainbow Six Siege Stats',
                     iconURL: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/05100836-b28d-4395-a29d-2f17b751c23f/dcenrbz-667b492e-2ff6-4433-8308-873fd3adba67.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA1MTAwODM2LWIyOGQtNDM5NS1hMjlkLTJmMTdiNzUxYzIzZlwvZGNlbnJiei02NjdiNDkyZS0yZmY2LTQ0MzMtODMwOC04NzNmZDNhZGJhNjcucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.XIUJyFHUlKj59cIGEeTOmKwTdhKF1Ws810F4Bq4ff30',
-                })
-                .setFooter({text: 'Mover Bot'})
-                .setTimestamp()
+                },
+                footer: {
+                    text: 'Mover Bot',
+                },
+                timestamp: Date.now(),
+            })
             if (operatorName) {
                 const operator = Object.values(operators).find(operator => operator.name === operatorName)
                 embedded.setTitle(`${username}/${operator.name}`).setThumbnail(operator.icon)
@@ -90,9 +93,8 @@ module.exports = {
                     'Lootbox Chance': percent,
                 }
             }
-            for (const [key, value] of Object.entries(stats)) {
-                embedded.addField(key, value.toString(), true)
-            }
+            const fields = Object.entries(stats).map(([name, value]) => ({name, value: value.toString(), inline: true}))
+            embedded.addFields(fields)
             if (msg instanceof CommandInteraction)
                 return await msg.editReply({embeds: [embedded]})
             await msg.reply({embeds: [embedded]})
