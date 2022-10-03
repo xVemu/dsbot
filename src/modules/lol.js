@@ -57,21 +57,34 @@ module.exports = {
                     id,
                     name,
                     summonerLevel,
+                    profileIconId,
                 },
             } = await axios.get(`${baseURL}lol/summoner/v4/summoners/by-name/${nick}`)
             const {data: rank} = await axios.get(`${baseURL}lol/league/v4/entries/by-summoner/${id}`)
-            const fields = new Map()
-            fields.set('Level: ', summonerLevel.toString())
-            const embedded = new EmbedBuilder()
-                .setTitle(name)
-                .setColor(0x10B5BF)
-                .setAuthor({name: 'League Of Legends Stats'})
-                .setThumbnail('https://2.bp.blogspot.com/-HqSOKIIV59A/U8WP4WFW28I/AAAAAAAAT5U/qTSiV9UgvUY/s1600/icon.png')
-                .setFooter({text: 'Mover Bot'})
-            rank.forEach(({tier, rank, leaguePoints, wins, losses, queueType}) => {
-                fields.set(queueTypes[queueType], `${tier} ${rank} ${leaguePoints}LP(${wins}W/${losses}P)`)
+            const embedded = new EmbedBuilder({
+                title: name,
+                color: 0x10B5BF,
+                author: {
+                    name: 'League Of Legends Stats',
+                },
+                thumbnail: {
+                    url: `https://ddragon.leagueoflegends.com/cdn/12.18.1/img/profileicon/${profileIconId}.png`,
+                },
+                footer: {
+                    text: 'Mover Bot',
+                },
+                fields: [{name: 'Level: ', value: summonerLevel.toString()}, ...rank.map(({
+                    tier,
+                    rank,
+                    leaguePoints,
+                    wins,
+                    losses,
+                    queueType,
+                }) => ({
+                    name: queueTypes[queueType],
+                    value: `${tier} ${rank} ${leaguePoints}LP(${wins}W/${losses}P)`,
+                }))],
             })
-            embedded.addFields(Array.from(fields).map(([name, value]) => ({name, value})))
             await msg.reply({embeds: [embedded]})
         } catch (e) {
             if (e.response.status === 404)
