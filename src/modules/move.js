@@ -49,13 +49,15 @@ module.exports = {
             channelMoveTo ??= (channels.find(v => v.type === ChannelType.GuildVoice && v.members.size === 0 && v.permissionsFor(member).has(PermissionsBitField.Flags.Connect)) ||
                 channels.find(v => v !== memberChannel && v.type === ChannelType.GuildVoice && v.permissionsFor(member).has(PermissionsBitField.Flags.Connect)))
             if (!channelMoveTo) return await msg.reply({content: 'Haven\'t found right channel!', ephemeral: true})
-            const row = new ActionRowBuilder()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setCustomId('stop')
-                        .setLabel('STOP')
-                        .setStyle(ButtonStyle.Danger),
-                )
+            const row = new ActionRowBuilder({
+                components: [
+                    new ButtonBuilder({
+                        customId: 'stop',
+                        label: 'STOP',
+                        style: ButtonStyle.Danger,
+                    }),
+                ],
+            })
             await msg.reply({content: 'Moving!', components: [row]})
             let channel = channelMoveTo
             this.shouldMoving = true
