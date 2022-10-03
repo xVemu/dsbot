@@ -46,7 +46,6 @@ module.exports = {
             })),
         },
     ],
-    guildOnly: false,
     async execute(msg, [nameArg, regionArg]) {
         try {
             const region = regions[((regionArg?.value ?? regionArg))?.toUpperCase()] ?? regions['EUNE']

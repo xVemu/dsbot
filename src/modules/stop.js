@@ -5,7 +5,7 @@ const {CommandInteraction} = require('discord.js')
 module.exports = {
     name: 'stop',
     description: 'Stops moving!',
-    guildOnly: true,
+    dmPermission: false,
     async execute(msg) {
         require('./move').shouldMoving = false
         if (msg instanceof CommandInteraction)
