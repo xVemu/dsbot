@@ -5,7 +5,6 @@ const {ApplicationCommandOptionType} = require('discord.js')
 module.exports = {
     name: 'poll',
     description: 'Creates a simple poll.',
-    guildOnly: false,
     options: [
         {
             type: ApplicationCommandOptionType.String,

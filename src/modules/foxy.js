@@ -5,7 +5,6 @@ const axios = require('axios')
 module.exports = {
     name: 'foxy',
     description: 'Sends random fox picture.',
-    guildOnly: false,
     async execute(msg) {
         try {
             const {data: {image}} = await axios.get('https://randomfox.ca/floof/')

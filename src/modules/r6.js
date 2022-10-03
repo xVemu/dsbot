@@ -12,7 +12,6 @@ const R6API = require('r6api.js').default,
 module.exports = {
     name: 'r6',
     description: 'Sends info about player in Rainbow Six Siege.',
-    guildOnly: false,
     options: [
         {
             type: ApplicationCommandOptionType.String,

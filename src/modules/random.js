@@ -5,7 +5,6 @@ const {ApplicationCommandOptionType} = require('discord.js')
 module.exports = {
     name: 'random',
     description: 'Randomize number from the given range.',
-    guildOnly: false,
     options: [{
         type: ApplicationCommandOptionType.Integer,
         name: 'range',

@@ -29,7 +29,7 @@ module.exports = {
             required: false,
         },
     ],
-    guildOnly: true,
+    dmPermission: false,
     shouldMoving: false,
     async execute(msg, [userArg, delayArg]) {
         try {
