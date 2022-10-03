@@ -5,7 +5,6 @@ const axios = require('axios')
 module.exports = {
     name: 'meme',
     description: 'Sends random meme.',
-    guildOnly: false,
     async execute(msg) {
         try {
             const {data: {nsfw, url, title}} = await axios.get('https://meme-api.herokuapp.com/gimme')
