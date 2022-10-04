@@ -8,6 +8,6 @@ module.exports = {
     description: 'Sends random fact about cats.',
     async execute(msg) {
         const {data} = await axios.get('https://meowfacts.herokuapp.com/')
-        await msg.reply({embeds: [new EmbedBuilder().setTitle('Random cat fact!').setDescription(data.data[0]).setColor('Random').setTimestamp()]})
+        await msg.reply({embeds: [new EmbedBuilder({title: 'Random cat fact!', description: data.data[0], color: 0x10B5BF, timestamp: Date.now(), footer: {text: 'Mover Bot'}})]})
     },
 }
