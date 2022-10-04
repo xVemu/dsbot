@@ -6,3 +6,4 @@ screenlog.0
 .DS_Store
 config.json
 logf.log
+package-lock.json
