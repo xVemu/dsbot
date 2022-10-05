@@ -29,7 +29,7 @@ module.exports = {
   shouldMoving: false,
   async execute(msg, [{ member }, delayArg]) {
     try {
-      const delay = delayArg ? 1 : delayArg.value * 1000
+      const delay = delayArg ? delayArg.value * 1000 : 1000
 
       if (!member.voice.selfDeaf) {
         return await msg.reply({

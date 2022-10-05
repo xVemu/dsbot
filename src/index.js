@@ -30,22 +30,21 @@ client.on('ready', async () => {
     \n${client.user.username}
     \n${client.user.id}`)
   // It's for testing on my server
-  // await client.guilds.cache.get('501826205180231691').commands.set([...client.cmds.values()])
-  await client.application?.commands.set([...client.cmds.values()])
+  /* await client.guilds.cache.get('501826205180231691').commands.set([...client.cmds
+    .filter(cmd => cmd.isCommand ?? true).values()]) */
+  await client.application?.commands.set([...client.cmds
+    .filter(cmd => cmd.isCommand ?? true).values()])
 })
 
 client.on('interactionCreate', async interaction => {
-  if (interaction.isButton()) {
-    // eslint-disable-next-line no-return-await
-    return await client.cmds.get(interaction.customId)
-      .buttonClick(interaction)
-  }
-  if (!interaction.isChatInputCommand()) return
+  if (!interaction.isChatInputCommand() && !interaction.isButton()) return
 
-  const cmd = client.cmds.get(interaction.commandName)
+  const cmd = client.cmds.get(interaction.isButton()
+    ? interaction.customId
+    : interaction.commandName)
 
   try {
-    await cmd.execute(interaction, interaction.options.data)
+    await cmd.execute(interaction, interaction.options?.data)
   } catch (e) {
     console.error(e)
     if (interaction.deferred) return interaction.editReply('There was an error while executing this command!')
