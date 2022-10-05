@@ -22,16 +22,17 @@ module.exports = {
       data.push(cmds.map(({ name }) => name).join(', '))
       data.push('\nYou can send `/help (command name)` to get info on a specific command!')
 
-      return await msg.reply({ /* TODO */
+      return msg.reply({
         content: data.join('\n'),
         ephemeral: true,
       })
     }
+
     const name = command.value.toLowerCase()
     const cmd = cmds.get(name)
 
     if (!cmd) {
-      return await msg.reply({
+      return msg.reply({
         content: 'that\'s not a valid command!',
         ephemeral: true,
       })

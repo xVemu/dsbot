@@ -48,6 +48,8 @@ client.on('interactionCreate', async interaction => {
     await cmd.execute(interaction, interaction.options.data)
   } catch (e) {
     console.error(e)
+    if (interaction.deferred) return interaction.editReply('There was an error while executing this command!')
+
     await interaction.reply({
       content: 'There was an error while executing this command!',
       ephemeral: true,

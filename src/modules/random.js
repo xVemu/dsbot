@@ -12,7 +12,7 @@ module.exports = {
   async execute(msg, [range]) {
     const maxNumber = range.value
 
-    if (Number.isNaN(maxNumber)) return await msg.reply('that doesn\'t seem to be a valid number.')
+    if (Number.isNaN(maxNumber)) return msg.reply('that doesn\'t seem to be a valid number.')
 
     const random = (Math.floor(Math.random() * maxNumber) + 1).toString()
     await msg.reply(random)

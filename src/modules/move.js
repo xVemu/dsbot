@@ -77,11 +77,12 @@ module.exports = {
       await member.voice.setChannel(memberChannel, 'Hey, wake up!')
     } catch (e) {
       if (e.message === 'Target user is not connected to voice.') {
-        await msg.reply({
+        return msg.reply({
           content: e.message,
           ephemeral: true,
         })
-      } else throw e
+      }
+      throw e
     } finally {
       this.shouldMoving = false
     }
