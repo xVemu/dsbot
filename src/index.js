@@ -1,49 +1,58 @@
-'use strict'
-
-//CANARY  https://discord.com/api/oauth2/authorize?client_id=538290561677918233&permissions=16780352&scope=bot%20applications.commands
+// CANARY  https://discord.com/api/oauth2/authorize?client_id=538290561677918233&permissions=16780352&scope=bot%20applications.commands
 // https://discord.com/api/oauth2/authorize?client_id=516250691069804544&permissions=16780352&scope=bot%20applications.commands
-const {Client, GatewayIntentBits, Collection} = require('discord.js')
+const {
+  Client,
+  GatewayIntentBits,
+  Collection,
+} = require('discord.js')
 const fs = require('fs')
-const {token} = require('../config.json')
+const { token } = require('../config.json')
 
 const client = new Client({
-    presence: {
-        activities: [{
-            name: 'Use /',
-        }],
-    },
-    intents: [GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.Guilds],
+  presence: { activities: [{ name: 'Use /' }] },
+  intents: [GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.Guilds],
 })
 
 client.cmds = new Collection()
 
-const cmdFiles = fs.readdirSync('src/modules').filter(file => file.endsWith('.js'))
+const cmdFiles = fs
+  .readdirSync('src/modules')
+  .filter(file => file.endsWith('.js'))
 
-for (const file of cmdFiles) {
-    const cmd = require(`./modules/${file}`)
-    client.cmds.set(cmd.name, cmd)
-}
+cmdFiles.forEach(file => {
+  // eslint-disable-next-line global-require,import/no-dynamic-require
+  const cmd = require(`./modules/${file}`)
+  client.cmds.set(cmd.name, cmd)
+})
 
 client.on('ready', async () => {
-    console.log(`Logged in as
+  console.log(`Logged in as
     \n${client.user.username}
     \n${client.user.id}`)
-    // await client.guilds.cache.get('501826205180231691').commands.set([...client.cmds.values()]) //It's for testing on my server
-    await client.application?.commands.set([...client.cmds.values()])
+  // It's for testing on my server
+  // await client.guilds.cache.get('501826205180231691').commands.set([...client.cmds.values()])
+  await client.application?.commands.set([...client.cmds.values()])
 })
 
 client.on('interactionCreate', async interaction => {
-    if (interaction.isButton()) return await client.cmds.get(interaction.customId).buttonClick(interaction)
-    if (!interaction.isChatInputCommand()) return
+  if (interaction.isButton()) {
+    // eslint-disable-next-line no-return-await
+    return await client.cmds.get(interaction.customId)
+      .buttonClick(interaction)
+  }
+  if (!interaction.isChatInputCommand()) return
 
-    const cmd = client.cmds.get(interaction.commandName)
+  const cmd = client.cmds.get(interaction.commandName)
 
-    try {
-        await cmd.execute(interaction, interaction.options.data)
-    } catch (e) {
-        console.error(e)
-        await interaction.reply({content: 'There was an error while executing this command!', ephemeral: true})
-    }
+  try {
+    await cmd.execute(interaction, interaction.options.data)
+  } catch (e) {
+    console.error(e)
+    await interaction.reply({
+      content: 'There was an error while executing this command!',
+      ephemeral: true,
+    })
+  }
 })
 
 client.login(token)

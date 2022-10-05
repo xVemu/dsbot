@@ -1,57 +1,41 @@
 {
-    "env": {
-        "browser": false,
-        "commonjs": true,
-        "es6": true,
-        "node": true,
-        "mocha": true,
-        "jest": true
-    },
-    "extends": "eslint:recommended",
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaVersion": 2021
-    },
-    "rules": {
-        "strict": [
-            "error",
-            "global"
-        ],
-        "indent": [
-            "error",
-            4,
-            {
-                "SwitchCase": 1
-            }
-        ],
-        "quotes": [
-            "error",
-            "single",
-            {
-                "allowTemplateLiterals": false
-            }
-        ],
-        "semi": [
-            "error",
-            "never"
-        ],
-        "arrow-parens": [
-            "warn",
-            "as-needed"
-        ],
-        "prefer-destructuring": [
-            "warn",
-            {
-                "object": true,
-                "array": true
-            }
-        ],
-        "comma-dangle": [
-            "error",
-            "always-multiline"
-        ]
-    }
+  "extends": [
+    "airbnb-base"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "semi": [
+      "error",
+      "never"
+    ],
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
+    "consistent-return": "off",
+    "object-property-newline": [
+      "error",
+      {
+        "allowAllPropertiesOnSameLine": false
+      }
+    ],
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectPattern": {
+          "multiline": true
+        },
+        "ObjectExpression": {
+          "multiline": true,
+          "minProperties": 2
+        }
+      }
+    ],
+    "no-use-before-define": ["error", {
+        "functions": false,
+        "classes": false
+    }]
+  }
 }
