@@ -1,5 +1,5 @@
 // CANARY  https://discord.com/api/oauth2/authorize?client_id=538290561677918233&permissions=16780352&scope=bot%20applications.commands
-// https://discord.com/api/oauth2/authorize?client_id=516250691069804544&permissions=16780352&scope=bot%20applications.commands
+// https://discord.com/api/oauth2/authorize?client_id=516250691069804544&permissions=16843840&scope=applications.commands%20bot
 const {
   Client,
   GatewayIntentBits,
