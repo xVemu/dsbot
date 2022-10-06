@@ -1,6 +1,6 @@
-FROM node:16.6.1
+FROM node:18.5.0
 WORKDIR /app
-COPY package*.json ./
+COPY package.json ./
 RUN npm install --production
 COPY . .
-CMD [ "node", "src/index.js" ]
+CMD [ "npm", "run", "start" ]
