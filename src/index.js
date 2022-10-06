@@ -1,12 +1,8 @@
 // CANARY  https://discord.com/api/oauth2/authorize?client_id=538290561677918233&permissions=16780352&scope=bot%20applications.commands
 // https://discord.com/api/oauth2/authorize?client_id=516250691069804544&permissions=16843840&scope=applications.commands%20bot
-const {
-  Client,
-  GatewayIntentBits,
-  Collection,
-} = require('discord.js')
-const fs = require('fs')
-const { token } = require('../config.json')
+import { Client, Collection, GatewayIntentBits } from 'discord.js'
+import fs from 'fs'
+import config from './config.cjs'
 
 const client = new Client({
   presence: { activities: [{ name: 'Use /' }] },
@@ -19,9 +15,8 @@ const cmdFiles = fs
   .readdirSync('src/modules')
   .filter(file => file.endsWith('.js'))
 
-cmdFiles.forEach(file => {
-  // eslint-disable-next-line global-require,import/no-dynamic-require
-  const cmd = require(`./modules/${file}`)
+cmdFiles.forEach(async file => {
+  const { default: cmd } = await import(`./modules/${file}`)
   client.cmds.set(cmd.name, cmd)
 })
 
@@ -56,4 +51,4 @@ client.on('interactionCreate', async interaction => {
   }
 })
 
-client.login(token)
+client.login(config.token)

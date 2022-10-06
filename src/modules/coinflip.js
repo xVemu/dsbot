@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   name: 'coinflip',
   description: 'Flips a coin.',
   async execute(msg) {

@@ -33,11 +33,22 @@
         }
       }
     ],
-    "no-use-before-define": ["error", {
+    "no-use-before-define": [
+      "error",
+      {
         "functions": false,
         "classes": false
-    }],
+      }
+    ],
     "no-console": "off",
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "never",
+        "prev": "import",
+        "next": "import"
+      }
+    ]
   }
 }

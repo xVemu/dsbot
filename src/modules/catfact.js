@@ -1,14 +1,14 @@
-const axios = require('axios')
-const { EmbedBuilder } = require('discord.js')
+import axios from 'axios'
+import { EmbedBuilder } from 'discord.js'
 
-module.exports = {
+export default {
   name: 'catfact',
   description: 'Sends random fact about cats.',
   async execute(msg) {
-    const { data } = await axios.get('https://meowfacts.herokuapp.com/')
+    const { data: { data: facts } } = await axios.get('https://meowfacts.herokuapp.com/')
     const embed = new EmbedBuilder({
       title: 'Random cat fact!',
-      description: data.data[0],
+      description: facts[0],
       color: 0x10B5BF,
       timestamp: Date.now(),
       footer: { text: 'Mover Bot' },

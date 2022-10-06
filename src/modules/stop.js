@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   name: 'stop',
   description: 'Stops moving!',
   isCommand: false,

@@ -1,14 +1,16 @@
-const {
-  PermissionsBitField,
+import {
   ActionRowBuilder,
-  ButtonBuilder,
   ApplicationCommandOptionType,
-  ChannelType,
+  ButtonBuilder,
   ButtonStyle,
-} = require('discord.js')
-const sleep = require('util').promisify(setTimeout)
+  ChannelType,
+  PermissionsBitField,
+} from 'discord.js'
+import { promisify } from 'util'
 
-module.exports = {
+const sleep = promisify(setTimeout)
+
+export default {
   name: 'move',
   description: 'Hey, wake up!',
   options: [
