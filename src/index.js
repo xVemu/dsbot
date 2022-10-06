@@ -10,6 +10,7 @@ const client = new Client({
 })
 
 client.cmds = new Collection()
+client.movingList = []
 
 const cmdFiles = fs
   .readdirSync('src/modules')

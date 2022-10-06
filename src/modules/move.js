@@ -30,46 +30,49 @@ export default {
   dmPermission: false,
   shouldMoving: false,
   async execute(msg, [{ member }, delayArg]) {
+    const delay = delayArg ? delayArg.value * 1000 : 1000
+
+    if (!member.voice.selfDeaf) {
+      return msg.reply({
+        content: 'User isn\'t self deafen!',
+        ephemeral: true,
+      })
+    }
+
+    const memberChannel = member.voice.channel
+
+    const movingChannel = findChannel(member, msg.guild)
+
+    if (!movingChannel) {
+      return msg.reply({
+        content: 'Haven\'t found right channel!',
+        ephemeral: true,
+      })
+    }
+
+    const row = new ActionRowBuilder({
+      components: [
+        new ButtonBuilder({
+          customId: 'stop',
+          label: 'STOP',
+          style: ButtonStyle.Danger,
+        }),
+      ],
+    })
+
+    const { interaction: { id: interactionId } } = await msg.reply({
+      content: `Moving ${member}!`,
+      components: [row],
+      fetchReply: true,
+    })
+
+    const { client: { movingList } } = msg
+    movingList.push(interactionId)
+
+    let channel = movingChannel
+
     try {
-      const delay = delayArg ? delayArg.value * 1000 : 1000
-
-      if (!member.voice.selfDeaf) {
-        return await msg.reply({
-          content: 'User isn\'t self deafen!',
-          ephemeral: true,
-        })
-      }
-
-      const memberChannel = member.voice.channel
-
-      const movingChannel = findChannel(member, msg.guild)
-
-      if (!movingChannel) {
-        return await msg.reply({
-          content: 'Haven\'t found right channel!',
-          ephemeral: true,
-        })
-      }
-
-      const row = new ActionRowBuilder({
-        components: [
-          new ButtonBuilder({
-            customId: 'stop',
-            label: 'STOP',
-            style: ButtonStyle.Danger,
-          }),
-        ],
-      })
-
-      await msg.reply({
-        content: 'Moving!',
-        components: [row],
-      })
-
-      let channel = movingChannel
-      this.shouldMoving = true
-
-      while (member.voice.selfDeaf && this.shouldMoving) {
+      while (member.voice.selfDeaf && movingList.includes(interactionId)) {
         /* eslint-disable no-await-in-loop */
         await member.voice.setChannel(channel, 'Hey, wake up!')
         channel = channel === memberChannel ? movingChannel : memberChannel
@@ -86,7 +89,7 @@ export default {
       }
       throw e
     } finally {
-      this.shouldMoving = false
+      movingList.includes(interactionId)
     }
   },
 }

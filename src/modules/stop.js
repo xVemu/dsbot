@@ -3,8 +3,8 @@ export default {
   description: 'Stops moving!',
   isCommand: false,
   async execute(msg) {
-    // eslint-disable-next-line global-require
-    require('./move').shouldMoving = false
+    const { client: { movingList }, message: { interaction: { id: interactionId } } } = msg
+    movingList.splice(movingList.indexOf(interactionId), 1)
     await msg.message.delete()
   },
 }
