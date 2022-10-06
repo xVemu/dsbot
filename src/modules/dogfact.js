@@ -1,7 +1,7 @@
-const axios = require('axios')
-const { EmbedBuilder } = require('discord.js')
+import axios from 'axios'
+import { EmbedBuilder } from 'discord.js'
 
-module.exports = {
+export default {
   name: 'dogfact',
   description: 'Sends random fact about dogs.',
   async execute(msg) {

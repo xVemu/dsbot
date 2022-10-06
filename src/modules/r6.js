@@ -1,14 +1,14 @@
-const R6API = require('r6api.js').default
-const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
-const { r6mail, r6psw } = require('../../config.json')
+import R6API from 'r6api.js'
+import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js'
+import config from '../config.cjs'
 
 const platform = 'uplay'
 const R6 = new R6API({
-  email: r6mail,
-  password: r6psw,
+  email: config.r6mail,
+  password: config.r6psw,
 })
 
-module.exports = {
+export default {
   name: 'r6',
   description: 'Sends info about player in Rainbow Six Siege.',
   options: [

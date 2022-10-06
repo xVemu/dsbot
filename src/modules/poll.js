@@ -1,6 +1,6 @@
-const { ApplicationCommandOptionType } = require('discord.js')
+import { ApplicationCommandOptionType } from 'discord.js'
 
-module.exports = {
+export default {
   name: 'poll',
   description: 'Creates a simple poll.',
   options: [

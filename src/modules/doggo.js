@@ -1,6 +1,6 @@
-const axios = require('axios')
+import axios from 'axios'
 
-module.exports = {
+export default {
   name: 'doggo',
   description: 'Sends random dog picture.',
   async execute(msg) {

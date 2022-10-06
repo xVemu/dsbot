@@ -1,7 +1,8 @@
-const { EmbedBuilder, ApplicationCommandOptionType } = require('discord.js')
-const { lolKey } = require('../../config.json')
-// eslint-disable-next-line import/order
-const axios = require('axios').create({ headers: { 'X-Riot-Token': lolKey } })
+import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js'
+import Axios from 'axios'
+import config from '../config.cjs'
+
+const axios = Axios.create({ headers: { 'X-Riot-Token': config.lolKey } })
 
 const regions = {
   BR: 'br1',
@@ -23,7 +24,7 @@ const queueTypes = {
   RANKED_TFT: 'TFT: ',
 }
 
-module.exports = {
+export default {
   name: 'lol',
   description: 'Sends info about player in League Of Legends.',
   options: [
