@@ -1,6 +1,12 @@
-FROM node:18.5.0
+FROM node:lts-alpine
+
 WORKDIR /app
-COPY package.json ./
-RUN npm install --production
+
+RUN npm install -g pnpm
+COPY pnpm-lock.yaml ./
+RUN pnpm fetch --prod
+
 COPY . .
-CMD [ "npm", "run", "start" ]
+RUN pnpm install -r --offline --prod
+
+CMD [ "pnpm", "run", "start" ]

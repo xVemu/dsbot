@@ -52,4 +52,5 @@ client.on('interactionCreate', async interaction => {
   }
 })
 
+// noinspection JSIgnoredPromiseFromCall
 client.login(config.token)
