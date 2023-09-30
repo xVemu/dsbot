@@ -8,7 +8,6 @@ export default {
     const {
       data: { text },
     } = await axios.get('https://uselessfacts.jsph.pl/api/v2/facts/today');
-    console.log(`🚀 ~ file: uselessfact.js:10 ~ execute ~ text:`, text);
 
     await msg.reply({
       embeds: [
