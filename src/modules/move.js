@@ -82,14 +82,11 @@ export default {
       await member.voice.setChannel(memberChannel, 'Hey, wake up!')
     } catch (e) {
       if (e.message === 'Target user is not connected to voice.') {
-        return msg.reply({
-          content: e.message,
-          ephemeral: true,
-        })
+        return msg.deleteReply()
       }
       throw e
     } finally {
-      movingList.includes(interactionId)
+      movingList.splice(movingList.indexOf(interactionId), 1)
     }
   },
 }

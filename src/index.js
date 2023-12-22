@@ -45,10 +45,13 @@ client.on('interactionCreate', async interaction => {
     console.error(e)
     if (interaction.deferred) return interaction.editReply('There was an error while executing this command!')
 
-    await interaction.reply({
-      content: 'There was an error while executing this command!',
-      ephemeral: true,
-    })
+    try {
+      await interaction.reply({
+        content: 'There was an error while executing this command!',
+        ephemeral: true,
+      })
+    } catch (_) { /* empty */
+    }
   }
 })
 
