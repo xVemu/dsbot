@@ -5,6 +5,9 @@ export default {
   async execute(msg) {
     const { client: { movingList }, message: { interaction: { id: interactionId } } } = msg
     movingList.splice(movingList.indexOf(interactionId), 1)
-    await msg.message.delete()
+    try {
+      await msg.message.delete()
+    } catch (e) { /* empty */
+    }
   },
 }

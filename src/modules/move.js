@@ -83,7 +83,16 @@ export default {
     } catch (e) {
       if (e.message === 'Target user is not connected to voice.') {
         return msg.deleteReply()
+          .catch(() => {})
       }
+
+      if (e.message === 'Missing Permissions') {
+        return msg.editReply({
+          content: 'I haven\'t enough permissions to move user!',
+          components: [],
+        })
+      }
+
       throw e
     } finally {
       movingList.splice(movingList.indexOf(interactionId), 1)
@@ -97,8 +106,10 @@ function findChannel(member, guild) {
 
   return channels.find(v => v.type === ChannelType.GuildVoice
       && v.members.size === 0
-      && v.permissionsFor(member).has(PermissionsBitField.Flags.Connect))
+      && v.permissionsFor(member)
+        .has(PermissionsBitField.Flags.Connect))
     || channels.find(v => v !== member.voice.channel
       && v.type === ChannelType.GuildVoice
-      && v.permissionsFor(member).has(PermissionsBitField.Flags.Connect))
+      && v.permissionsFor(member)
+        .has(PermissionsBitField.Flags.Connect))
 }
