@@ -30,6 +30,12 @@ export default {
       await msg.deferReply()
 
       const [user] = await R6.findByUsername(platform, nickArg.value)
+      if (user.userId === undefined) {
+        return msg.editReply({
+          content: 'Player not found.',
+          ephemeral: true,
+        })
+      }
 
       const [progression] = await R6.getProgression(platform, user.userId)
       const userStats = await R6.getStats(platform, user.userId, { categories: ['generalpvp', 'weaponspvp', 'operatorspvp'] })
