@@ -30,7 +30,7 @@ export default {
       await msg.deferReply()
 
       const [user] = await R6.findByUsername(platform, nickArg.value)
-      if (user.userId === undefined) {
+      if (user === undefined) {
         return msg.editReply({
           content: 'Player not found.',
           ephemeral: true,
