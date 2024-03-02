@@ -28,8 +28,11 @@ client.on('ready', async () => {
   // It's for testing on my server
   /* await client.guilds.cache.get('501826205180231691').commands.set([...client.cmds
     .filter(cmd => cmd.isCommand ?? true).values()]) */
-  await client.application?.commands.set([...client.cmds
-    .filter(cmd => cmd.isCommand ?? true).values()])
+  await client.application?.commands.set([
+    ...client.cmds
+      .filter(cmd => cmd.isCommand ?? true)
+      .values(),
+  ])
 })
 
 client.on('interactionCreate', async interaction => {
@@ -42,8 +45,16 @@ client.on('interactionCreate', async interaction => {
   try {
     await cmd.execute(interaction, interaction.options?.data)
   } catch (e) {
-    console.error(e)
-    if (interaction.deferred) return interaction.editReply('There was an error while executing this command!')
+    console.error({
+      e,
+      command: interaction.commandName,
+      arguments: interaction.options?.data,
+    })
+    if (interaction.deferred) {
+      return interaction.editReply(
+        'There was an error while executing this command!',
+      )
+    }
 
     try {
       await interaction.reply({
