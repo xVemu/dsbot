@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { EmbedBuilder } from 'discord.js';
+import { fetchJson } from '../utils.js'
 
 export default {
   name: 'excuse',
   description: 'Sends random excuse.',
   async execute(msg) {
-    const {
-      data: [{ excuse, category }],
-    } = await axios.get('https://excuser-three.vercel.app/v1/excuse');
+    const [{ excuse, category }] = await fetchJson('https://excuser-three.vercel.app/v1/excuse');
 
     await msg.reply({
       embeds: [
