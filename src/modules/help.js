@@ -19,7 +19,7 @@ export default {
 
     if (!command) {
       data.push('Here\'s a list of all my commands:')
-      data.push(cmds.map(({ name }) => name).join(', '))
+      data.push(cmds.keys().map(({ name }) => name).toArray().join(', '))
       data.push('\nYou can send `/help (command name)` to get info on a specific command!')
 
       return msg.reply({
@@ -33,7 +33,7 @@ export default {
 
     if (!cmd) {
       return msg.reply({
-        content: 'that\'s not a valid command!',
+        content: 'That\'s not a valid command!',
         ephemeral: true,
       })
     }

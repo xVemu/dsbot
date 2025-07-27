@@ -1,33 +1,35 @@
 {
   "name": "dsbot",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Discord bot made in JavaScript",
-  "main": "src/index.js",
-  "scripts": {
-    "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "npx nodemon --inspect",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/xVemu/dsbot.git"
   },
-  "type": "module",
   "author": "Vemu (Kamil Kras)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/xVemu/dsbot/issues"
   },
   "homepage": "https://github.com/xVemu/dsbot#readme",
+  "type": "module",
+  "module": "src/index.js",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "bun --watch src/index.js",
+    "start": "NODE_ENV=production bun src/index.js",
+    "tests": "bun test",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
   "dependencies": {
     "discord.js": "^14.14.1"
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
-    "nodemon": "^3.1.0",
+    "eslint": "^9.31.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.29.1"
+    "eslint-plugin-import": "^2.29.1",
+    "@types/bun": "latest"
   }
 }
