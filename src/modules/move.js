@@ -23,12 +23,11 @@ export default {
     {
       type: ApplicationCommandOptionType.Number,
       name: 'delay',
-      description: 'Delay between moving',
+      description: 'Delay between moving in seconds',
       required: false,
     },
   ],
   dmPermission: false,
-  shouldMoving: false,
   async execute(msg, [{ member }, delayArg]) {
     const delay = delayArg ? delayArg.value * 1000 : 1000
 
@@ -66,17 +65,17 @@ export default {
       fetchReply: true,
     })
 
-    const { client: { movingList } } = msg
-    movingList.push(interactionId)
+    const { client: { movingSet } } = msg
+    movingSet.add(interactionId)
 
     let channel = movingChannel
 
     try {
-      while (member.voice.selfDeaf && movingList.includes(interactionId)) {
+      while (member.voice.selfDeaf && movingSet.has(interactionId)) {
         /* eslint-disable no-await-in-loop */
         await member.voice.setChannel(channel, 'Hey, wake up!')
         channel = channel === memberChannel ? movingChannel : memberChannel
-        await sleep(delay) // TODO cancel sleep when shouldMoving or selfDeaf changes
+        await sleep(delay)
       }
       /* eslint-enable no-await-in-loop */
       await member.voice.setChannel(memberChannel, 'Hey, wake up!')
@@ -95,7 +94,7 @@ export default {
 
       throw e
     } finally {
-      movingList.splice(movingList.indexOf(interactionId), 1)
+      movingSet.delete(interactionId)
     }
   },
 }
@@ -104,12 +103,18 @@ function findChannel(member, guild) {
   if (guild.afkChannel) return guild.afkChannel
   const channels = guild.channels.cache
 
-  return channels.find(v => v.type === ChannelType.GuildVoice
-      && v.members.size === 0
-      && v.permissionsFor(member)
-        .has(PermissionsBitField.Flags.Connect))
-    || channels.find(v => v !== member.voice.channel
-      && v.type === ChannelType.GuildVoice
-      && v.permissionsFor(member)
-        .has(PermissionsBitField.Flags.Connect))
+  let secondBest
+
+  for (const ch of channels) {
+    // Skip if it's not a voice channel or a member can't connect to it.
+    if(ch.type !== ChannelType.GuildVoice || !ch.permissionsFor(member).has(PermissionsBitField.Flags.Connect)) continue
+
+    if (ch.members.size === 0) return ch
+
+    // If couldn't find an empty channel.
+    // Find a channel which the member is not connected to
+    if(ch !== member.voice.channel) secondBest = ch
+  }
+
+  return secondBest
 }
