@@ -1,6 +1,6 @@
 import R6API from 'r6api.js'
 import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js'
-import config from '../config.cjs'
+import config from '../../config.json'
 
 const platform = 'uplay'
 const R6 = new R6API({
@@ -10,6 +10,7 @@ const R6 = new R6API({
 
 export default {
   name: 'r6',
+  isCommand: false, // Disabled because none api work
   description: 'Sends info about player in Rainbow Six Siege.',
   options: [
     {

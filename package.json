@@ -22,8 +22,7 @@
   },
   "homepage": "https://github.com/xVemu/dsbot#readme",
   "dependencies": {
-    "discord.js": "^14.14.1",
-    "r6api.js": "^4.4.1"
+    "discord.js": "^14.14.1"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
