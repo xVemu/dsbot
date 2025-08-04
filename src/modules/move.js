@@ -118,3 +118,6 @@ function findChannel(member, guild) {
 
   return secondBest
 }
+
+// Only for tests
+export const __testChannel = findChannel

@@ -19,7 +19,7 @@
   "scripts": {
     "dev": "bun --watch src/index.js",
     "start": "NODE_ENV=production bun src/index.js",
-    "tests": "bun test",
+    "tests": "bun test --preload ./test/setup.js test",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"
   },
