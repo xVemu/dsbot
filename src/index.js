@@ -1,6 +1,6 @@
 // CANARY  https://discord.com/api/oauth2/authorize?client_id=538290561677918233&permissions=16780352&scope=bot%20applications.commands
-// https://discord.com/api/oauth2/authorize?client_id=516250691069804544&permissions=16843840&scope=applications.commands%20bot
-import { Client, GatewayIntentBits } from 'discord.js'
+// https://discord.com/oauth2/authorize?client_id=516250691069804544
+import { Client, Events, GatewayIntentBits, MessageFlags } from 'discord.js'
 import config from '../config.json'
 import { Glob } from 'bun'
 
@@ -17,7 +17,7 @@ for await (const file of new Glob('*.js').scan('src/modules')) {
   client.cmds.set(cmd.name, cmd)
 }
 
-client.on('ready', async () => {
+client.once(Events.ClientReady, async () => {
   console.log(`Logged in as
     \n${client.user.username}
     \n${client.user.id}`)
@@ -31,7 +31,7 @@ client.on('ready', async () => {
   await client.guilds.cache.get('501826205180231691').commands.set(commands)
 })
 
-client.on('interactionCreate', async interaction => {
+client.on(Events.InteractionCreate, async interaction => {
   if (!interaction.isChatInputCommand() && !interaction.isButton()) return
 
   const cmd = client.cmds.get(interaction.isButton()
@@ -54,7 +54,7 @@ client.on('interactionCreate', async interaction => {
     try {
       await interaction.reply({
         content: 'There was an error while executing this command!',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       })
     } catch (_) { /* empty */
     }

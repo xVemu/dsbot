@@ -1,5 +1,5 @@
 // import R6API from 'r6api.js'
-import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js'
+import { ApplicationCommandOptionType, EmbedBuilder, MessageFlags } from 'discord.js'
 
 const platform = 'uplay'
 /*const R6 = new R6API({
@@ -33,7 +33,7 @@ export default {
       if (user === undefined) {
         return msg.editReply({
           content: 'Player not found.',
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         })
       }
 
@@ -43,7 +43,7 @@ export default {
       if (!userStats.length) {
         return msg.editReply({
           content: 'Player not found.',
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         })
       }
 

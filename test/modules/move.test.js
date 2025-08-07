@@ -12,7 +12,17 @@ const member = {
 }
 
 beforeEach(() => {
-  mockClient.reply.mockImplementation(async () => ({ interaction: { id: 1234 } }))
+  mockClient.reply.mockImplementation(async () => ({
+    resource:
+      {
+        message:
+          {
+            interaction: {
+              id: 1234,
+            },
+          },
+      },
+  }))
   mockClient.guild = {
     afkChannel: {},
   }

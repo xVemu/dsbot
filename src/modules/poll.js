@@ -19,11 +19,11 @@ export default {
   ],
   async execute(msg, [option1, option2]) {
     const message = `✅ - ${option1.value} \n❌ - ${option2.value}`
-    const sent = await msg.reply({
+    const { resource: { message: sent } } = await msg.reply({
       content: message,
-      fetchReply: true,
+      withResponse: true,
     })
-    sent.react('✅')
-    sent.react('❌')
+    await sent.react('✅')
+    await sent.react('❌')
   },
 }

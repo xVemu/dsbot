@@ -13,7 +13,6 @@
   },
   "homepage": "https://github.com/xVemu/dsbot#readme",
   "type": "module",
-  "module": "src/index.js",
   "private": true,
   "main": "src/index.js",
   "scripts": {
@@ -24,7 +23,7 @@
     "lint:fix": "eslint src --fix"
   },
   "dependencies": {
-    "discord.js": "^14.14.1"
+    "discord.js": "^14.21.0"
   },
   "devDependencies": {
     "eslint": "^9.31.0",

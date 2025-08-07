@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from 'discord.js'
+import { ApplicationCommandOptionType, MessageFlags } from 'discord.js'
 
 export default {
   name: 'help',
@@ -19,12 +19,12 @@ export default {
 
     if (!command) {
       data.push('Here\'s a list of all my commands:')
-      data.push(cmds.keys().map(({ name }) => name).toArray().join(', '))
+      data.push(cmds.values().map(({ name }) => name).toArray().join(', '))
       data.push('\nYou can send `/help (command name)` to get info on a specific command!')
 
       return msg.reply({
         content: data.join('\n'),
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       })
     }
 
@@ -34,7 +34,7 @@ export default {
     if (!cmd) {
       return msg.reply({
         content: 'That\'s not a valid command!',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       })
     }
 
@@ -49,7 +49,7 @@ export default {
 
     await msg.reply({
       content: data.join('\n'),
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
     })
   },
 }
