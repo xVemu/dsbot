@@ -1,12 +1,8 @@
-FROM node:lts-alpine
+FROM oven/bun:1.2.19-alpine
 
 WORKDIR /app
 
-RUN npm install -g pnpm
-COPY pnpm-lock.yaml ./
-RUN pnpm fetch --prod
-
 COPY . .
-RUN pnpm install -r --offline --prod
+RUN bun install --production
 
-CMD [ "pnpm", "run", "start" ]
+CMD [ "bun", "start" ]

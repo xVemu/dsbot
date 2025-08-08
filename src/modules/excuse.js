@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder } from 'discord.js'
 import { fetchJson } from '../utils.js'
 
 export default {
