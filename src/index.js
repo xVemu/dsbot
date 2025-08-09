@@ -1,18 +1,18 @@
 // CANARY  https://discord.com/api/oauth2/authorize?client_id=538290561677918233&permissions=16780352&scope=bot%20applications.commands
 // https://discord.com/oauth2/authorize?client_id=516250691069804544
-import { Client, Events, GatewayIntentBits, MessageFlags } from 'discord.js'
-import config from '../config.json'
-import { Glob } from 'bun'
+import { Client, Events, GatewayIntentBits, MessageFlags } from "discord.js"
+import config from "../config.json"
+import { Glob } from "bun"
 
 const client = new Client({
-  presence: { activities: [{ name: 'Use /' }] },
+  presence: { activities: [{ name: "Use /" }] },
   intents: [GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.Guilds],
 })
 
 client.cmds = new Map()
 client.movingSet = new Set()
 
-for await (const file of new Glob('*.js').scan('src/modules')) {
+for await (const file of new Glob("*.js").scan("src/modules")) {
   const { default: cmd } = await import(`./modules/${file}`)
   client.cmds.set(cmd.name, cmd)
 }
@@ -22,21 +22,25 @@ client.once(Events.ClientReady, async () => {
     \n${client.user.username}
     \n${client.user.id}`)
 
-  const commands = client.cmds.values().filter(cmd => cmd.isCommand !== false).toArray()
+  const commands = client.cmds
+    .values()
+    .filter(cmd => cmd.isCommand !== false)
+    .toArray()
 
-  if (process.env.NODE_ENV === 'production')
+  if (process.env.NODE_ENV === "production")
     return await client.application?.commands.set(commands)
 
   // It's for testing on my server
-  await client.guilds.cache.get('501826205180231691').commands.set(commands)
+  await client.guilds.cache.get("501826205180231691").commands.set(commands)
 })
 
 client.on(Events.InteractionCreate, async interaction => {
+  // biome-ignore lint/complexity/useSimplifiedLogicExpression: Hard to read
   if (!interaction.isChatInputCommand() && !interaction.isButton()) return
 
-  const cmd = client.cmds.get(interaction.isButton()
-    ? interaction.customId
-    : interaction.commandName)
+  const cmd = client.cmds.get(
+    interaction.isButton() ? interaction.customId : interaction.commandName,
+  )
 
   try {
     await cmd.execute(interaction, interaction.options?.data)
@@ -47,16 +51,18 @@ client.on(Events.InteractionCreate, async interaction => {
       arguments: interaction.options?.data,
     })
 
-    if (interaction.deferred) return interaction.editReply(
-      'There was an error while executing this command!',
-    )
+    if (interaction.deferred)
+      return interaction.editReply(
+        "There was an error while executing this command!",
+      )
 
     try {
       await interaction.reply({
-        content: 'There was an error while executing this command!',
+        content: "There was an error while executing this command!",
         flags: MessageFlags.Ephemeral,
       })
-    } catch (_) { /* empty */
+    } catch (_) {
+      /* empty */
     }
   }
 })

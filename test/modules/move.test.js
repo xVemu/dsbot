@@ -1,8 +1,8 @@
-import { beforeEach, describe, expect, mock, test } from 'bun:test'
-import { mockClient } from '../setup.js'
-import move, { __testChannel } from '../../src/modules/move.js'
-import { ChannelType } from 'discord.js'
-import { promisify } from 'util'
+import { beforeEach, describe, expect, mock, test } from "bun:test"
+import { mockClient } from "../setup.js"
+import move, { __testChannel } from "../../src/modules/move.js"
+import { ChannelType } from "discord.js"
+import { promisify } from "util"
 
 const member = {
   voice: {
@@ -13,23 +13,21 @@ const member = {
 
 beforeEach(() => {
   mockClient.reply.mockImplementation(async () => ({
-    resource:
-      {
-        message:
-          {
-            interaction: {
-              id: 1234,
-            },
-          },
+    resource: {
+      message: {
+        interaction: {
+          id: 1234,
+        },
       },
+    },
   }))
   mockClient.guild = {
     afkChannel: {},
   }
 })
 
-describe('early fail', () => {
-  test('Is not deafen', async () => {
+describe("early fail", () => {
+  test("Is not deafen", async () => {
     const member = {
       voice: {
         selfDeaf: false,
@@ -37,10 +35,10 @@ describe('early fail', () => {
     }
 
     await move.execute(mockClient, [{ member }])
-    expect(mockClient.replyArgument.content).toEqual('User isn\'t self deafen!')
+    expect(mockClient.replyArgument.content).toEqual("User isn't self deafen!")
   })
 
-  test('Can\'t find channel', async () => {
+  test("Can't find channel", async () => {
     mockClient.guild = {
       channels: {
         cache: [],
@@ -48,18 +46,24 @@ describe('early fail', () => {
     }
 
     await move.execute(mockClient, [{ member }])
-    expect(mockClient.replyArgument.content).toEqual('Haven\'t found right channel!')
+    expect(mockClient.replyArgument.content).toEqual(
+      "Haven't found right channel!",
+    )
   })
 
-  test('Missing permissions', async () => {
-    member.voice.setChannel.mockImplementationOnce(() => { throw new Error('Missing Permissions') })
+  test("Missing permissions", async () => {
+    member.voice.setChannel.mockImplementationOnce(() => {
+      throw new Error("Missing Permissions")
+    })
 
     await move.execute(mockClient, [{ member }])
-    expect(mockClient.editReplyArgument.content).toEqual('I haven\'t enough permissions to move user!')
+    expect(mockClient.editReplyArgument.content).toEqual(
+      "I haven't enough permissions to move user!",
+    )
   })
 })
 
-describe('findChannel', () => {
+describe("findChannel", () => {
   const textChannel = {
     type: ChannelType.GuildText,
     permissionsFor: () => ({ has: () => false }),
@@ -106,13 +110,13 @@ describe('findChannel', () => {
     },
   }
 
-  test('afk channel', async () => {
-    const res = __testChannel({}, { afkChannel: 'asd' })
+  test("afk channel", async () => {
+    const res = __testChannel({}, { afkChannel: "asd" })
 
-    expect(res).toEqual('asd')
+    expect(res).toEqual("asd")
   })
 
-  test('empty channel', async () => {
+  test("empty channel", async () => {
     const guild = {
       afkChannel: null,
       channels: {
@@ -130,7 +134,7 @@ describe('findChannel', () => {
     expect(res).toEqual(emptyChannel)
   })
 
-  test('second best', async () => {
+  test("second best", async () => {
     const guild = {
       afkChannel: null,
       channels: {
@@ -147,15 +151,11 @@ describe('findChannel', () => {
     expect(res).toEqual(almostFullChannel)
   })
 
-  test('find none', async () => {
+  test("find none", async () => {
     const guild = {
       afkChannel: null,
       channels: {
-        cache: [
-          textChannel,
-          noPermissionChannel,
-          fullChannel,
-        ],
+        cache: [textChannel, noPermissionChannel, fullChannel],
       },
     }
 
@@ -166,11 +166,11 @@ describe('findChannel', () => {
 
 const sleep = promisify(setTimeout)
 
-describe('stopped', async () => {
+describe("stopped", async () => {
   const member = {
     voice: {
       selfDeaf: true,
-      channel: 'original',
+      channel: "original",
       setChannel: mock(),
     },
   }
@@ -179,7 +179,7 @@ describe('stopped', async () => {
     member.voice.selfDeaf = true
   })
 
-  test('stop button', async () => {
+  test("stop button", async () => {
     const promise = move.execute(mockClient, [{ member }])
 
     await sleep(3562)
@@ -192,7 +192,7 @@ describe('stopped', async () => {
     expect(member.voice.setChannel).toHaveBeenCalledTimes(1 + 3 + 1)
   }, 5000)
 
-  test('undeafen', async () => {
+  test("undeafen", async () => {
     const promise = move.execute(mockClient, [{ member }])
 
     await sleep(3562)
@@ -205,13 +205,15 @@ describe('stopped', async () => {
     expect(member.voice.setChannel).toHaveBeenCalledTimes(1 + 3 + 1)
   }, 5000)
 
-  test('left server', async () => {
+  test("left server", async () => {
     const promise = move.execute(mockClient, [{ member }])
 
     await sleep(3562)
     expect(mockClient.client.movingSet.size).toEqual(1)
 
-    member.voice.setChannel.mockImplementationOnce(() => { throw new Error('Target user is not connected to voice.') })
+    member.voice.setChannel.mockImplementationOnce(() => {
+      throw new Error("Target user is not connected to voice.")
+    })
     await promise
 
     expect(mockClient.client.movingSet).toBeEmpty()

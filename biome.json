@@ -1,0 +1,94 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.1.4/schema.json",
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["src/**/*.js", "test/**/*.js"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineEnding": "crlf"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "noForEach": "error",
+        "noUselessStringConcat": "error",
+        "useSimplifiedLogicExpression": "error",
+        "useWhile": "error"
+      },
+      "nursery": {
+        "noAwaitInLoop": "error",
+        "noImplicitCoercion": "error",
+        "noMisusedPromises": "error",
+        "noNonNullAssertedOptionalChain": "error",
+        "noSecrets": "error",
+        "noUnassignedVariables": "error",
+        "noUselessEscapeInString": "error",
+        "noUselessUndefined": "error",
+        "useConsistentObjectDefinition": "error",
+        "useConsistentResponse": "error",
+        "useExhaustiveSwitchCases": "error",
+        "useIndexOf": "error",
+        "useIterableCallbackReturn": "error",
+        "useNumericSeparators": "error",
+        "useObjectSpread": "error",
+        "useParseIntRadix": "error",
+        "useSingleJsDocAsterisk": "error"
+      },
+      "performance": {
+        "noDelete": "error",
+        "noNamespaceImport": "error"
+      },
+      "style": {
+        "noCommonJs": "error",
+        "noDoneCallback": "error",
+        "noNegationElse": "error",
+        "noNestedTernary": "error",
+        "noSubstr": "error",
+        "noUnusedTemplateLiteral": "error",
+        "noUselessElse": "error",
+        "useArrayLiterals": "error",
+        "useAtIndex": "error",
+        "useCollapsedElseIf": "error",
+        "useCollapsedIf": "error",
+        "useConsistentBuiltinInstantiation": "error",
+        "useDefaultSwitchClause": "error",
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "strictCase": false,
+            "filenameCases": ["camelCase"]
+          }
+        },
+        "useForOf": "error",
+        "useNamingConvention": {
+          "level": "error",
+          "options": {
+            "strictCase": false
+          }
+        },
+        "useShorthandAssign": "error",
+        "useTemplate": "error",
+        "useTrimStartEnd": "error"
+      },
+      "suspicious": {
+        "noMisrefactoredShorthandAssign": "error",
+        "noTemplateCurlyInString": "error",
+        "noVar": "error"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "semicolons": "asNeeded",
+      "arrowParentheses": "asNeeded"
+    }
+  },
+  "assist": {
+    "enabled": false
+  }
+}

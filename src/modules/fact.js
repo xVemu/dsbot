@@ -1,25 +1,28 @@
-import { ApplicationCommandOptionType, EmbedBuilder } from 'discord.js'
-import { fetchJson } from '../utils.js'
+import { ApplicationCommandOptionType, EmbedBuilder } from "discord.js"
+import { fetchJson } from "../utils.js"
 
 const types = new Map([
-  ['cat', cat],
-  ['dog', dog],
-  ['useless', useless],
+  ["cat", cat],
+  ["dog", dog],
+  ["useless", useless],
 ])
 
 export default {
-  name: 'fact',
-  description: 'Sends random fact.',
+  name: "fact",
+  description: "Sends random fact.",
   options: [
     {
       type: ApplicationCommandOptionType.String,
-      name: 'type',
-      description: 'Fact type',
+      name: "type",
+      description: "Fact type",
       required: true,
-      choices: types.keys().map(name => ({
-        name,
-        value: name,
-      })).toArray(),
+      choices: types
+        .keys()
+        .map(name => ({
+          name,
+          value: name,
+        }))
+        .toArray(),
     },
   ],
   async execute(msg, [type]) {
@@ -27,22 +30,27 @@ export default {
     const embed = new EmbedBuilder({
       title: `Random ${type.value} fact!`,
       description: fact,
-      color: 0x10B5BF,
+      // biome-ignore lint/nursery/useNumericSeparators: Easier to copy and paste to see color
+      color: 0x10b5bf,
       timestamp: Date.now(),
-      footer: { text: 'Mover Bot' },
+      footer: { text: "Mover Bot" },
     })
     await msg.reply({ embeds: [embed] })
   },
 }
 
 function dog() {
-  return fetchJson('https://dogapi.dog/api/v2/facts').then(res => res.data[0].attributes.body)
+  return fetchJson("https://dogapi.dog/api/v2/facts").then(
+    res => res.data[0].attributes.body,
+  )
 }
 
 function useless() {
-  return fetchJson('https://uselessfacts.jsph.pl/api/v2/facts/today').then(res => res.text)
+  return fetchJson("https://uselessfacts.jsph.pl/api/v2/facts/today").then(
+    res => res.text,
+  )
 }
 
 function cat() {
-  return fetchJson('https://meowfacts.herokuapp.com/').then(res => res.data[0])
+  return fetchJson("https://meowfacts.herokuapp.com/").then(res => res.data[0])
 }

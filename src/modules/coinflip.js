@@ -1,7 +1,7 @@
 export default {
-  name: 'coinflip',
-  description: 'Flips a coin.',
+  name: "coinflip",
+  description: "Flips a coin.",
   async execute(msg) {
-    await msg.reply((Math.floor(Math.random() * 2) === 0) ? 'heads' : 'tails')
+    await msg.reply(Math.floor(Math.random() * 2) === 0 ? "heads" : "tails")
   },
 }

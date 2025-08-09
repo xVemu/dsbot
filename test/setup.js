@@ -1,5 +1,5 @@
-import { beforeEach, jest, mock } from 'bun:test'
-import { Glob } from 'bun'
+import { beforeEach, jest, mock } from "bun:test"
+import { Glob } from "bun"
 
 beforeEach(() => {
   jest.clearAllMocks()
@@ -26,7 +26,7 @@ export const mockClient = {
   },
 }
 
-for await (const file of new Glob('*.js').scan('src/modules')) {
+for await (const file of new Glob("*.js").scan("src/modules")) {
   const { default: cmd } = await import(`../src/modules/${file}`)
   mockClient.client.cmds.set(cmd.name, cmd)
 }
