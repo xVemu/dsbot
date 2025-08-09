@@ -19,8 +19,7 @@
     "dev": "bun --watch src/index.js",
     "start": "NODE_ENV=production bun src/index.js",
     "tests": "bun test --preload ./test/setup.js test",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "format": "bun x --bun biome format --write"
   },
   "dependencies": {
     "discord.js": "^14.21.0"

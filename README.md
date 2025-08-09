@@ -1,55 +1,41 @@
 # dsbot
 
-Discord bot made in JavaScript.
+Discord bot to wake up your friend, made in JavaScript.
 
-# invite
+# Invite
 
-https://discord.com/api/oauth2/authorize?client_id=516250691069804544&permissions=16843840&scope=applications.commands%20bot
+https://discord.com/oauth2/authorize?client_id=516250691069804544
 
-# install
+# Install
 
-* run `npm install`
-* edit example-config.json
-* run `npm start` or `node src/index.js`
+* run `bun install`
+* edit example-config.json and rename to config.json
+* run `bun start`
 
-# develop
+# Develop
 
-* run `npm install`
-* edit example-config.json
-* run `npm debug`
-* run `npm run lint:fix` before doing a pull request
+* run `bun install`
+* edit example-config.json and rename to config.json
+* run `bun dev`
 
-# features
+# Features
 
-## Animals:
+| Command  | Description                                                                        |
+|----------|------------------------------------------------------------------------------------|
+| Animal   | Picture of selected animal                                                         |
+| Coinflip | Flips a coin                                                                       |
+| Excuse   | Random excuse                                                                      |
+| Fact     | Random fact of selected type                                                       |
+| Help     | List all commands                                                                  |
+| Lol      | Info about player in League of Legends                                             |
+| Meme     | Random meme                                                                        |
+| Move     | It can wake up your friend by moving them from channel to channel until he unmutes |
+| Poll     | Creates simple poll                                                                |
+| Random   | Randomize number from the given range                                              |
 
-* `/catfact` - Sends random fact about cats.
-* `/dogfact` - Sends random fact about dogs.
-* `/doggo` - Sends a random dog picture.
-* `/duck` - Sends a random duck picture.
-* `/foxy` - Sends a random fox picture.
-* `/kitty` - Sends a random cat picture.
-* `/meme` - Sends a random meme.
-
-## Games:
-
-* `/lol` - Sends info about player in League Of Legends.
-* `/r6` - Sends info about player in Rainbow Six Siege.
-
-## Moving:
-
-* `/move` - It can wake up you friend by moving them from channel he was to a random channel until he unmutes.
-
-## Useful:
-
-* `/coinflip` - Flips a coin.
-* `/help` - List all of my commands or info about a specific command.
-* `/poll` - Creates a simple poll.
-* `/random` - Randomize number from the given range.
-
-# technologies used
+# Technologies used
 
 * [discord.js](https://discord.js.org/#/)
-* [node.js](https://nodejs.org/en/)
-* [r6api.js](https://npmjs.com/package/r6api.js)
+* [bun](http://bun.com/)
 * [riot api](https://developer.riotgames.com/)
+* [biome](https://biomejs.dev/)
