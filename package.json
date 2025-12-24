@@ -22,7 +22,8 @@
     "format": "bun x --bun biome format --write"
   },
   "dependencies": {
-    "discord.js": "^14.21.0"
+    "discord.js": "^14.21.0",
+    "r6-data.js": "^1.8.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.4",

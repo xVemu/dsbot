@@ -1,20 +1,17 @@
-// import R6API from 'r6api.js'
-/** biome-ignore-all lint: Disabled */
 import {
   ApplicationCommandOptionType,
   EmbedBuilder,
   MessageFlags,
 } from "discord.js"
+import * as r6 from "r6-data.js"
+import { runCatching } from "../utils.js"
 
 const platform = "uplay"
-/*const R6 = new R6API({
-  email: config.r6mail,
-  password: config.r6psw,
-})*/
+const platformFamilies = "pc"
 
 export default {
   name: "r6",
-  isCommand: false, // Disabled because none api work
+  isCommand: true,
   description: "Sends info about player in Rainbow Six Siege.",
   options: [
     {
@@ -23,56 +20,68 @@ export default {
       description: "player's nick",
       required: true,
     },
-    {
-      type: ApplicationCommandOptionType.String,
-      name: "operator",
-      description: "operator's name",
-      required: false,
-    },
   ],
-  async execute(msg, [nickArg, operatorArg]) {
+  async execute(msg, [nickArg]) {
     try {
       await msg.deferReply()
 
-      const [user] = await R6.findByUsername(platform, nickArg.value)
-      if (user === undefined)
-        return msg.editReply({
-          content: "Player not found.",
-          flags: MessageFlags.Ephemeral,
+      const nick = nickArg.value
+
+      const [err, { level, profilePicture }] = await runCatching(
+        r6.getAccountInfo({ platformType: platform, nameOnPlatform: nick }),
+      )
+
+      if (err?.status === 404 || err?.status === 400)
+        return msg.editReply("Player not found.")
+      if (err !== undefined) {
+        // noinspection ExceptionCaughtLocallyJS
+        throw err
+      }
+
+      const stats = await r6
+        .getPlayerStats({
+          platformType: platform,
+          nameOnPlatform: nickArg.value,
+          platform_families: platformFamilies,
+          board_id: "ranked",
         })
+        .then(
+          body =>
+            body.platform_families_full_profiles[0].board_ids_full_profiles[0]
+              .full_profiles[0],
+        )
 
-      const [progression] = await R6.getProgression(platform, user.userId)
-      const userStats = await R6.getStats(platform, user.userId, {
-        categories: ["generalpvp", "weaponspvp", "operatorspvp"],
-      })
-
-      if (!userStats.length)
-        return msg.editReply({
-          content: "Player not found.",
-          flags: MessageFlags.Ephemeral,
+      const rank = await r6
+        .getSeasonalStats({
+          platformType: platform,
+          nameOnPlatform: nick,
         })
+        .then(body => body.data.history.data[0]?.[1])
 
-      const {
-        0: { seasons },
-      } = await R6.getRanks(platform, user.userId, {
-        seasonIds: -1,
-        boardIds: "pvp_ranked",
-      })
+      const matches = stats.season_statistics.match_outcomes
+      const kda = stats.season_statistics
 
-      const region = Object.values(seasons)[0].regions.emea.boards.pvp_ranked
+      const statsMap = {
+        Level: level,
+        Rank: `${rank?.metadata?.rank}, ${rank?.value} MMR`,
+        Matches: `${matches.losses + matches.wins} (${(
+          (matches.wins / (matches.losses + matches.wins)) * 100
+        ).toFixed(2)}% WR)`,
+        "K/D": `${kda.kills}/${kda.deaths} (${(kda.kills / (kda.deaths || 1)).toFixed(2)})`,
+      }
 
-      const statsEmbedded = operatorArg
-        ? getOperatorStats({
-            operatorName: operatorArg.value.toLowerCase(),
-            username: user.username,
-            operators: userStats[0].pvp.operators,
-          })
-        : getUserStats({
-            user,
-            region,
-            progression,
-            pvp: userStats[0].pvp,
-          })
+      // Values for a player who has not played in a while.
+      if (rank === undefined) statsMap["Rank"] = "UNRANKED"
+      if (matches.losses + matches.wins === 0) statsMap["Matches"] = "None"
+
+      const statsEmbedded = {
+        title: nick,
+        thumbnail: { url: profilePicture },
+        fields: Object.entries(statsMap).map(([name, value]) => ({
+          name,
+          value: value.toString(),
+        })),
+      }
 
       const embedded = new EmbedBuilder({
         color: 0x808080,
@@ -88,10 +97,9 @@ export default {
 
       await msg.editReply({ embeds: [embedded] })
     } catch (e) {
-      if (e.message === "Incorrect operator's name")
-        return msg.editReply(e.message)
+      console.error("r6api:" + e)
 
-      throw e
+      return msg.editReply("There was an error while executing this command!")
     }
   },
 }
