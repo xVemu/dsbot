@@ -5,7 +5,7 @@
       "name": "dsbot",
       "dependencies": {
         "discord.js": "^14.21.0",
-        "r6-data.js": "^1.8.3",
+        "r6-data.js": "^2.0.1",
       },
       "devDependencies": {
         "@biomejs/biome": "^2.1.4",
@@ -124,7 +124,7 @@
 
     "proxy-from-env": ["proxy-from-env@1.1.0", "", {}, "sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg=="],
 
-    "r6-data.js": ["r6-data.js@1.8.3", "", { "dependencies": { "axios": "^1.13.2", "ms": "^2.1.3" } }, "sha512-3h98Nb4NxS/mncVSA/VvGdPLQ9CtcL0fHx6PEBy3EzPxJAQkSlISQUdMj85n5M0HrSDlxeIaGwjeMYk/dxYB4g=="],
+    "r6-data.js": ["r6-data.js@2.0.1", "", { "dependencies": { "axios": "^1.13.2", "ms": "^2.1.3" } }, "sha512-5G47UMwrmUxXfeY4XvRGCMS8oj3QPnf3dla3fRUs57vE7nrv96IJC/ZvWXjzqr+FfOtBLIWf3OADK54pSEHY+Q=="],
 
     "ts-mixer": ["ts-mixer@6.0.4", "", {}, "sha512-ufKpbmrugz5Aou4wcr5Wc1UUFWOLhq+Fm6qa6P0w0K5Qw2yhaUoiWszhCVuNQyNwrlGiscHOmqYoAox1PtvgjA=="],
 

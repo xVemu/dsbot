@@ -5,6 +5,7 @@ import {
 } from "discord.js"
 import * as r6 from "r6-data.js"
 import { runCatching } from "../utils.js"
+import { r6dataEUkey } from "../../config.json"
 
 const platform = "uplay"
 const platformFamilies = "pc"
@@ -28,7 +29,7 @@ export default {
       const nick = nickArg.value
 
       const [err, { level, profilePicture }] = await runCatching(
-        r6.getAccountInfo({ platformType: platform, nameOnPlatform: nick }),
+        r6.getAccountInfo(r6dataEUkey, { platformType: platform, nameOnPlatform: nick }),
       )
 
       if (err?.status === 404 || err?.status === 400)
@@ -39,7 +40,7 @@ export default {
       }
 
       const stats = await r6
-        .getPlayerStats({
+        .getPlayerStats(r6dataEUkey, {
           platformType: platform,
           nameOnPlatform: nickArg.value,
           platform_families: platformFamilies,
@@ -52,7 +53,7 @@ export default {
         )
 
       const rank = await r6
-        .getSeasonalStats({
+        .getSeasonalStats(r6dataEUkey, {
           platformType: platform,
           nameOnPlatform: nick,
         })

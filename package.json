@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "discord.js": "^14.21.0",
-    "r6-data.js": "^1.8.3"
+    "r6-data.js": "^2.0.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.4",

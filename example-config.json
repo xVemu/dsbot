@@ -1,5 +1,6 @@
 {
     "token": "your discord bot token goes here",
-    "lolKey": "your lol developer token goes here"
+    "lolKey": "your lol developer token goes here",
+    "r6dataEUkey": "your r6data.eu developer token goes here"
 }
 // rename file to config.json and remove this comment
