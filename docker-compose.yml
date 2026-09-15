@@ -1,6 +1,7 @@
 services:
   dsbot:
     build: .
+    image: dsbot:latest
     restart: on-failure
     tty: true
     stdin_open: true
