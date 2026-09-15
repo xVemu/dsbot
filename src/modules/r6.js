@@ -1,14 +1,14 @@
 import {
   ApplicationCommandOptionType,
   EmbedBuilder,
-  MessageFlags,
 } from "discord.js"
-import * as r6 from "r6-data.js"
+import { R6Client } from "r6-data.js"
 import { runCatching } from "../utils.js"
 import { r6dataEUkey } from "../../config.json"
 
 const platform = "uplay"
 const platformFamilies = "pc"
+const r6 = new R6Client({ apiKey: r6dataEUkey })
 
 export default {
   name: "r6",
@@ -28,36 +28,29 @@ export default {
 
       const nick = nickArg.value
 
-      const [err, { level, profilePicture }] = await runCatching(
-        r6.getAccountInfo(r6dataEUkey, { platformType: platform, nameOnPlatform: nick }),
+      const [err, profile] = await runCatching(
+        r6.players.getProfile({
+          platformType: platform,
+          nameOnPlatform: nick,
+          platform_families: platformFamilies,
+        }),
       )
 
-      if (err?.status === 404 || err?.status === 400)
+      if (err?.response?.status === 404 || err?.response?.status === 400)
         return msg.editReply("Player not found.")
       if (err !== undefined) {
         // noinspection ExceptionCaughtLocallyJS
         throw err
       }
 
-      const stats = await r6
-        .getPlayerStats(r6dataEUkey, {
-          platformType: platform,
-          nameOnPlatform: nickArg.value,
-          platform_families: platformFamilies,
-          board_id: "ranked",
-        })
-        .then(
-          body =>
-            body.platform_families_full_profiles[0].board_ids_full_profiles[0]
-              .full_profiles[0],
-        )
+      const { level, profilePicture } = profile.account ?? {}
+      const stats =
+        profile.stats.platform_families_full_profiles[0]
+          .board_ids_full_profiles.find(({ board_id }) => board_id === "ranked")
+          ?.full_profiles[0]
+      const rank = profile.history?.data?.[0]?.[1]
 
-      const rank = await r6
-        .getSeasonalStats(r6dataEUkey, {
-          platformType: platform,
-          nameOnPlatform: nick,
-        })
-        .then(body => body.data.history.data[0]?.[1])
+      if (!stats) return msg.editReply("Player has no ranked stats.")
 
       const matches = stats.season_statistics.match_outcomes
       const kda = stats.season_statistics
